@@ -327,8 +327,8 @@ body {
 
 /* ========== BUTTONS ========== */
 .btn-primary {
-    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-    color: #000;
+    background: linear-gradient(135deg, #8a8a8a, #6a6a6a);
+    color: #fff;
     border: none;
     padding: 12px 24px;
     border-radius: 10px;
@@ -336,7 +336,7 @@ body {
     font-weight: 700;
     font-size: 0.95rem;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 4px 12px rgba(212, 87, 109, 0.3);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
     display: inline-flex;
     align-items: center;
     gap: 8px;
@@ -344,7 +344,8 @@ body {
 
 .btn-primary:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(212, 87, 109, 0.4);
+    background: linear-gradient(135deg, #9a9a9a, #7a7a7a);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
 }
 
 .btn-primary:active {
@@ -354,10 +355,10 @@ body {
 .btn-submit {
     width: 100%;
     padding: 14px;
-    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    background: linear-gradient(135deg, #8a8a8a, #6a6a6a);
     border: none;
     border-radius: 10px;
-    color: #000;
+    color: #fff;
     font-weight: 700;
     cursor: pointer;
     margin-top: 20px;
@@ -366,7 +367,8 @@ body {
 
 .btn-submit:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(212, 87, 109, 0.4);
+    background: linear-gradient(135deg, #9a9a9a, #7a7a7a);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
 }
 
 .btn-danger {
@@ -454,8 +456,8 @@ body {
 
 .level-badge {
     display: inline-block;
-    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-    color: #000;
+    background: linear-gradient(135deg, #8a8a8a, #6a6a6a);
+    color: #fff;
     padding: 4px 12px;
     border-radius: 8px;
     font-size: 0.75em;
@@ -546,8 +548,8 @@ body {
 .set-badge {
     display: inline-block;
     padding: 3px 10px;
-    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-    color: #000;
+    background: linear-gradient(135deg, #8a8a8a, #6a6a6a);
+    color: #fff;
     border-radius: 6px;
     font-size: 0.75em;
     font-weight: 800;
@@ -609,11 +611,11 @@ body {
 }
 
 .chip.active {
-    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    background: linear-gradient(135deg, #8a8a8a, #6a6a6a);
     color: #fff !important;
     border-color: transparent;
     font-weight: 800;
-    box-shadow: 0 4px 12px rgba(212, 87, 109, 0.4);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 }
 
 /* ========== SUB-OPTION FILTERS ========== */
@@ -662,15 +664,15 @@ body {
 
 .sub-btn:hover {
     background: rgba(255, 255, 255, 0.1);
-    border-color: var(--primary);
+    border-color: #8a8a8a;
     color: var(--text-main);
 }
 
 .sub-btn.active {
-    background: var(--primary) !important;
+    background: #8a8a8a !important;
     color: #fff !important;
-    border-color: var(--primary) !important;
-    box-shadow: 0 0 10px rgba(212, 87, 109, 0.3);
+    border-color: #8a8a8a !important;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
 
 .sub-btn.include.active {
@@ -686,8 +688,8 @@ body {
 }
 
 .sub-btn.sort.active {
-    background: var(--primary) !important;
-    border-color: var(--primary) !important;
+    background: #8a8a8a !important;
+    border-color: #8a8a8a !important;
     color: #fff !important;
 }
 
@@ -812,8 +814,8 @@ body {
     position: absolute;
     top: -8px;
     left: -8px;
-    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-    color: #000;
+    background: linear-gradient(135deg, #8a8a8a, #6a6a6a);
+    color: #fff;
     font-size: 0.75rem;
     font-weight: 900;
     width: 26px;
