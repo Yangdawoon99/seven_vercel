@@ -571,7 +571,11 @@ window.showEquipDetail = function (equipDataOrId) {
     const setIconPath = equipmentData.setIcons[equip.set];
     const setIconHtml = setIconPath ? `<img src="${setIconPath}" style="width:24px; height:24px; margin-right:8px; vertical-align:middle;" onerror="this.style.display='none';">` : '';
 
-    document.getElementById('detail-name').innerText = equip.name + (equip.enhance ? ` +${equip.enhance}` : '');
+    // Find index in userEquipment to show "No. X"
+    const idx = userEquipment.findIndex(e => e.id === (equip.id || equipDataOrId)); // Handle both data or ID
+    const noPrefix = idx > -1 ? `[No.${idx + 1}] ` : '';
+
+    document.getElementById('detail-name').innerText = noPrefix + equip.name + (equip.enhance ? ` +${equip.enhance}` : '');
     document.getElementById('detail-type').innerText = equip.subType === 'magic' ? '마법 무기' : (equip.subType === 'physical' ? '물리 무기' : '방어구');
     document.getElementById('detail-set').innerHTML = `${setIconHtml}${SET_LABELS[equip.set] || equip.set}`;
 

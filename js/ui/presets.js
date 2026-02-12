@@ -1,6 +1,7 @@
 import { STAT_LABELS } from '/js/utils/constants.js';
 import { heroes } from '/data/heroes.js';
 import { ApiService } from '/js/services/api.js';
+import { userEquipment } from './equipment.js'; // Added for index lookup
 
 export let presets = [];
 
@@ -62,7 +63,6 @@ export function renderPresetList() {
         const hero = heroes.find(h => h.id === preset.heroId);
         const heroName = hero ? hero.name : '알 수 없음';
 
-        // Tag badge color
         const tagColors = {
             'PVP': '#ff4444',
             'PVE': '#44ff44',
@@ -77,9 +77,14 @@ export function renderPresetList() {
 
         const renderItem = (item, label) => {
             if (!item) return `<div><strong>${label}:</strong> 없음</div>`;
+
+            // Find index in userEquipment to show "No. X"
+            const idx = userEquipment.findIndex(e => e.id === item.id);
+            const noLabel = idx > -1 ? `<span style="background:var(--primary-color); color:white; padding:1px 5px; border-radius:3px; font-size:0.7rem; margin-right:5px; font-weight:normal;">No.${idx + 1}</span>` : '';
+
             return `
                 <div style="cursor:pointer; color:#eee; hover:color:var(--primary);" onclick="window.showPresetItemDetail('${preset.id}', '${label}')">
-                    <strong>${label}:</strong> <span style="text-decoration:underline;">${item.name}</span>
+                    <strong>${label}:</strong> ${noLabel}<span style="text-decoration:underline;">${item.name}</span>
                 </div>
             `;
         };
