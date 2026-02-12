@@ -5,21 +5,24 @@ import { initContentsUI } from './ui/contents.js';
 import { initPresetsUI } from './ui/presets.js';
 import { initHelpUI } from './ui/help.js';
 
+// Debug function: type 'resetSena()' in console if needed
+// Define at top level for immediate availability
+window.resetSena = () => {
+    sessionStorage.removeItem('sena_auth');
+    alert("인증 정보가 초기화되었습니다. 페이지를 새로고침합니다.");
+    location.reload();
+};
+
 // App Entry Point
 document.addEventListener('DOMContentLoaded', async () => {
     // 1. Simple Access Authentication
     const AUTH_CODE = 'senafinal0522';
 
-    // Debug function: type 'resetSena()' in console if needed
-    window.resetSena = () => {
-        sessionStorage.removeItem('sena_auth');
-        location.reload();
-    };
+    console.log("Checking Authentication...");
 
     // Check session first
     if (sessionStorage.getItem('sena_auth') !== 'true') {
-        console.log("Authentication required.");
-        const userInput = window.prompt("SENA-RE GEAR 접속 인증\n인증 코드를 입력하세요 (관리 주소 제외):");
+        const userInput = window.prompt("SENA-RE GEAR 접속 인증\n인증 코드를 입력하세요:");
 
         if (userInput === AUTH_CODE) {
             sessionStorage.setItem('sena_auth', 'true');
@@ -64,7 +67,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 'presets': '프리셋 관리',
                 'settings': '설정'
             };
-            pageTitle.innerText = sectionTitles[tabName];
+            pageTitle.innerText = sectionTitles[tabName] || '매니저';
 
             // Show/Hide Sections
             sections.forEach(sec => sec.style.display = 'none');
@@ -72,9 +75,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             const targetSection = document.getElementById(`${tabName}-section`);
             if (targetSection) {
                 targetSection.style.display = 'block';
-            } else {
-                // Temporary for unimplemented sections
-                console.log(`Section ${tabName} not implemented yet`);
             }
         });
     });
