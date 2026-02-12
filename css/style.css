@@ -48,7 +48,7 @@ body {
 .sidebar {
     width: 260px;
     background: linear-gradient(180deg, var(--bg-panel) 0%, var(--bg-dark) 100%);
-    border-right: 1px solid rgba(102, 252, 241, 0.1);
+    border-right: 1px solid rgba(212, 87, 109, 0.1);
     display: flex;
     flex-direction: column;
     padding: 0;
@@ -110,7 +110,7 @@ body {
 
 .nav-links li:hover,
 .nav-links li.active {
-    background: linear-gradient(90deg, rgba(102, 252, 241, 0.1), transparent);
+    background: linear-gradient(90deg, rgba(212, 87, 109, 0.1), transparent);
     color: var(--primary);
     transform: translateX(4px);
 }
@@ -132,7 +132,7 @@ body {
     right: 0;
     width: 600px;
     height: 600px;
-    background: radial-gradient(circle, rgba(102, 252, 241, 0.05) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(212, 87, 109, 0.05) 0%, transparent 70%);
     pointer-events: none;
 }
 
@@ -142,7 +142,7 @@ body {
     align-items: center;
     justify-content: space-between;
     padding: 0 35px;
-    border-bottom: 1px solid rgba(102, 252, 241, 0.08);
+    border-bottom: 1px solid rgba(212, 87, 109, 0.08);
     background: rgba(31, 40, 51, 0.6);
     backdrop-filter: blur(20px);
     z-index: 5;
@@ -164,8 +164,8 @@ body {
 }
 
 .icon-btn {
-    background: rgba(102, 252, 241, 0.1);
-    border: 1px solid rgba(102, 252, 241, 0.2);
+    background: rgba(212, 87, 109, 0.1);
+    border: 1px solid rgba(212, 87, 109, 0.2);
     color: var(--primary);
     font-size: 1.2rem;
     cursor: pointer;
@@ -179,7 +179,7 @@ body {
 }
 
 .icon-btn:hover {
-    background: rgba(102, 252, 241, 0.2);
+    background: rgba(212, 87, 109, 0.2);
     transform: translateY(-2px);
     box-shadow: var(--shadow-glow);
 }
@@ -189,9 +189,9 @@ body {
     align-items: center;
     gap: 12px;
     padding: 8px 16px;
-    background: rgba(102, 252, 241, 0.05);
+    background: rgba(212, 87, 109, 0.05);
     border-radius: 12px;
-    border: 1px solid rgba(102, 252, 241, 0.1);
+    border: 1px solid rgba(212, 87, 109, 0.1);
 }
 
 .profile span {
@@ -217,12 +217,12 @@ body {
 }
 
 #content-area::-webkit-scrollbar-thumb {
-    background: rgba(102, 252, 241, 0.3);
+    background: rgba(212, 87, 109, 0.3);
     border-radius: 4px;
 }
 
 #content-area::-webkit-scrollbar-thumb:hover {
-    background: rgba(102, 252, 241, 0.5);
+    background: rgba(212, 87, 109, 0.5);
 }
 
 /* ========== DASHBOARD WIDGETS ========== */
@@ -235,7 +235,7 @@ body {
 
 .widget {
     background: linear-gradient(145deg, rgba(31, 40, 51, 0.8), rgba(26, 29, 38, 0.6));
-    border: 1px solid rgba(102, 252, 241, 0.15);
+    border: 1px solid rgba(212, 87, 109, 0.15);
     border-radius: 16px;
     padding: 24px;
     box-shadow: var(--shadow-md);
@@ -281,7 +281,7 @@ body {
 /* ========== CARDS ========== */
 .card {
     background: linear-gradient(145deg, rgba(31, 40, 51, 0.8), rgba(26, 29, 38, 0.6));
-    border: 1px solid rgba(102, 252, 241, 0.12);
+    border: 1px solid rgba(212, 87, 109, 0.12);
     border-radius: 16px;
     padding: 24px;
     box-shadow: var(--shadow-md);
@@ -289,7 +289,7 @@ body {
 }
 
 .card:hover {
-    border-color: rgba(102, 252, 241, 0.3);
+    border-color: rgba(212, 87, 109, 0.3);
 }
 
 /* ========== SECTIONS ========== */
@@ -336,7 +336,7 @@ body {
     font-weight: 700;
     font-size: 0.95rem;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 4px 12px rgba(102, 252, 241, 0.3);
+    box-shadow: 0 4px 12px rgba(212, 87, 109, 0.3);
     display: inline-flex;
     align-items: center;
     gap: 8px;
@@ -344,7 +344,7 @@ body {
 
 .btn-primary:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(102, 252, 241, 0.4);
+    box-shadow: 0 6px 20px rgba(212, 87, 109, 0.4);
 }
 
 .btn-primary:active {
@@ -366,7 +366,7 @@ body {
 
 .btn-submit:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(102, 252, 241, 0.4);
+    box-shadow: 0 6px 20px rgba(212, 87, 109, 0.4);
 }
 
 .btn-danger {
@@ -391,7 +391,7 @@ body {
     position: relative;
     overflow: hidden;
     padding: 0 !important;
-    border: 1px solid rgba(102, 252, 241, 0.15);
+    border: 1px solid rgba(212, 87, 109, 0.15);
     background: linear-gradient(145deg, var(--bg-panel), var(--bg-card)) !important;
     border-radius: 16px;
 }
@@ -477,7 +477,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 1px solid rgba(102, 252, 241, 0.3);
+    border: 1px solid rgba(212, 87, 109, 0.3);
     color: var(--primary);
     cursor: pointer;
     transition: all 0.3s ease;
@@ -498,7 +498,7 @@ body {
     min-height: 140px;
     background: linear-gradient(145deg, rgba(31, 40, 51, 0.85), rgba(26, 29, 38, 0.7)) !important;
     backdrop-filter: blur(15px);
-    border: 1px solid rgba(102, 252, 241, 0.15);
+    border: 1px solid rgba(212, 87, 109, 0.15);
     border-radius: 14px;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -516,7 +516,7 @@ body {
     width: 36px;
     height: 36px;
     border-radius: 0 14px 0 14px;
-    background: rgba(102, 252, 241, 0.05) !important;
+    background: rgba(212, 87, 109, 0.05) !important;
     color: var(--text-muted);
     opacity: 0.3;
     transition: all 0.2s;
@@ -524,7 +524,7 @@ body {
 
 .equip-card:hover .settings-btn {
     opacity: 1;
-    background: rgba(102, 252, 241, 0.1) !important;
+    background: rgba(212, 87, 109, 0.1) !important;
 }
 
 .equip-name-compact {
@@ -560,7 +560,7 @@ body {
     padding: 28px;
     border-radius: 18px;
     margin-bottom: 32px;
-    border: 1px solid rgba(102, 252, 241, 0.15);
+    border: 1px solid rgba(212, 87, 109, 0.15);
     box-shadow: var(--shadow-lg);
     display: flex !important;
     flex-direction: column;
@@ -590,8 +590,8 @@ body {
 }
 
 .chip {
-    background: rgba(102, 252, 241, 0.05);
-    border: 1px solid rgba(102, 252, 241, 0.15);
+    background: rgba(212, 87, 109, 0.05);
+    border: 1px solid rgba(212, 87, 109, 0.15);
     color: var(--text-muted);
     padding: 10px 20px;
     border-radius: 10px;
@@ -603,7 +603,7 @@ body {
 
 .chip:hover {
     border-color: var(--primary);
-    background: rgba(102, 252, 241, 0.1);
+    background: rgba(212, 87, 109, 0.1);
     color: var(--text-main);
     transform: translateY(-2px);
 }
@@ -708,7 +708,7 @@ body {
     background: linear-gradient(145deg, var(--bg-panel), var(--bg-card));
     margin: 8% auto;
     padding: 35px;
-    border: 1px solid rgba(102, 252, 241, 0.2);
+    border: 1px solid rgba(212, 87, 109, 0.2);
     width: 440px;
     max-width: 90%;
     border-radius: 18px;
@@ -747,7 +747,7 @@ body {
     width: 100%;
     padding: 12px;
     border-radius: 8px;
-    border: 1px solid rgba(102, 252, 241, 0.2);
+    border: 1px solid rgba(212, 87, 109, 0.2);
     background-color: rgba(11, 12, 16, 0.8);
     color: var(--text-main);
     font-size: 0.95rem;
@@ -758,7 +758,7 @@ body {
 .form-group select:focus {
     outline: none;
     border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(102, 252, 241, 0.1);
+    box-shadow: 0 0 0 3px rgba(212, 87, 109, 0.1);
 }
 
 /* ========== UTILITIES ========== */
@@ -795,8 +795,8 @@ body {
 .mini-tag {
     font-size: 0.75em;
     padding: 3px 10px;
-    background: rgba(102, 252, 241, 0.08);
-    border: 1px solid rgba(102, 252, 241, 0.15);
+    background: rgba(212, 87, 109, 0.08);
+    border: 1px solid rgba(212, 87, 109, 0.15);
     border-radius: 6px;
     color: var(--text-muted);
 }
