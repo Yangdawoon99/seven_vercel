@@ -7,50 +7,21 @@ import { initHelpUI } from './ui/help.js';
 
 // App Entry Point
 document.addEventListener('DOMContentLoaded', async () => {
-    // 1. Access Authentication Logic
+    // 1. Simple Access Authentication
     const AUTH_CODE = 'senafinal0522';
-    const authOverlay = document.getElementById('auth-overlay');
-    const authInput = document.getElementById('auth-code-input');
-    const authBtn = document.getElementById('auth-submit-btn');
-    const authError = document.getElementById('auth-error-msg');
 
-    const checkAuth = () => {
-        const isAuth = sessionStorage.getItem('sena_auth') === 'true';
-        console.log("Auth Check Status:", isAuth);
-        if (!authOverlay) {
-            console.error("Auth Overlay Element NOT FOUND in DOM!");
-            return;
-        }
-        if (isAuth) {
-            authOverlay.style.display = 'none';
-        } else {
-            authOverlay.style.setProperty('display', 'flex', 'important');
-            authOverlay.style.opacity = '1';
-        }
-    };
+    // Check session first
+    if (sessionStorage.getItem('sena_auth') !== 'true') {
+        const userInput = window.prompt("인증 코드를 입력하세요:");
 
-    const handleAuth = () => {
-        console.log("Attempting Auth with code...");
-        if (authInput.value === AUTH_CODE) {
+        if (userInput === AUTH_CODE) {
             sessionStorage.setItem('sena_auth', 'true');
-            authOverlay.style.transition = 'opacity 0.5s';
-            authOverlay.style.opacity = '0';
-            setTimeout(() => { authOverlay.style.display = 'none'; }, 500);
         } else {
-            authError.style.display = 'block';
-            authInput.value = '';
-            authInput.focus();
+            alert("인증에 실패했습니다. 올바른 사용자만 접근 가능합니다.");
+            document.body.innerHTML = "<h1 style='color:white; text-align:center; margin-top:100px;'>Access Denied.</h1>";
+            return; // Stop initialization
         }
-    };
-
-    if (authBtn) authBtn.addEventListener('click', handleAuth);
-    if (authInput) {
-        authInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') handleAuth();
-        });
     }
-
-    checkAuth();
 
     console.log("Sena-Re Gear Manager Initialized with DB Backend");
 
