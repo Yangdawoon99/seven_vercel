@@ -97,14 +97,14 @@ function showMemberLogin() {
     dom.stepMember.style.display = 'block';
 
     // Reset PIN state
-    resetPinInputs();
+    resetPinInputs(true);
     dom.pinArea.style.display = 'none';
 }
 
-function resetPinInputs() {
+function resetPinInputs(clearState = false) {
     dom.pinDigits.forEach(input => input.value = '');
     if (dom.pinDigits.length > 0) dom.pinDigits[0].focus();
-    AuthState.tempPin = null;
+    if (clearState) AuthState.tempPin = null;
 }
 
 function setupEventListeners() {
@@ -124,17 +124,22 @@ function setupEventListeners() {
             };
 
             dom.pinArea.style.display = 'block';
-            resetPinInputs();
+            resetPinInputs(true); // Clear state when switching user
             updatePinInstruction();
         });
     }
 
-    // PIN Input Logic (Auto move)
+    // PIN Input Logic (Auto move & Auto Submit)
     if (dom.pinDigits) {
         dom.pinDigits.forEach((input, index) => {
             input.addEventListener('input', (e) => {
                 if (input.value.length === 1) {
-                    if (index < 3) dom.pinDigits[index + 1].focus();
+                    if (index < 3) {
+                        dom.pinDigits[index + 1].focus();
+                    } else {
+                        // All 4 digits entered, try submit automatically
+                        handleLoginAction();
+                    }
                 }
             });
 
@@ -180,7 +185,8 @@ function updatePinInstruction() {
 async function handleLoginAction() {
     const enteredPin = Array.from(dom.pinDigits).map(input => input.value).join('');
     if (enteredPin.length !== 4) {
-        dom.authMsg.textContent = '4자리를 모두 입력해주세요.';
+        // Don't show error immediately on typing, only on button click if incomplete
+        // But for auto-submit logic, just return silently unless triggered by button
         return;
     }
 
@@ -191,8 +197,10 @@ async function handleLoginAction() {
         if (!AuthState.tempPin) {
             // First entry
             AuthState.tempPin = enteredPin;
-            resetPinInputs(); // Clear for confirmation
+            // Clear inputs ONLY, keep state
+            dom.pinDigits.forEach(input => input.value = '');
             dom.pinDigits[0].focus();
+
             updatePinInstruction();
             dom.authMsg.textContent = '';
         } else {
@@ -212,14 +220,14 @@ async function handleLoginAction() {
                 } catch (e) {
                     dom.authMsg.textContent = '저장 실패: ' + e.message;
                     AuthState.tempPin = null;
-                    resetPinInputs();
+                    resetPinInputs(true);
                     updatePinInstruction();
                 }
             } else {
                 // Mismatch
                 dom.authMsg.textContent = 'PIN 번호가 일치하지 않습니다. 처음부터 다시 설정하세요.';
                 AuthState.tempPin = null;
-                resetPinInputs();
+                resetPinInputs(true);
                 updatePinInstruction();
             }
         }
@@ -241,8 +249,8 @@ async function handleLoginAction() {
                 loginSuccess(member);
             } else {
                 dom.authMsg.textContent = '잘못된 PIN 번호입니다.';
-                dom.pinDigits.forEach(input => input.value = '');
-                dom.pinDigits[0].focus();
+                resetPinInputs(false); // Clear inputs, keep user selection
+                dom.authMsg.textContent = '잘못된 PIN 번호입니다.'; // Re-set msg after clear
             }
         } catch (e) {
             dom.authMsg.textContent = '로그인 오류: ' + e.message;
