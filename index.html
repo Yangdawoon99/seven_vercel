@@ -102,20 +102,38 @@
                 <li class="active" data-tab="dashboard">
                     <i class="fas fa-home"></i> <span>대시보드</span>
                 </li>
+
+                <!-- Guild Contents -->
+                <li class="nav-header">길드 컨텐츠</li>
+                <li data-tab="guild-war">
+                    <i class="fas fa-swords"></i> <span>길드전</span>
+                </li>
+                <li data-tab="total-war">
+                    <i class="fas fa-flag-checkered"></i> <span>총력전</span>
+                </li>
+
+                <!-- Personal Contents -->
+                <li class="nav-header">개인 컨텐츠</li>
                 <li data-tab="heroes">
                     <i class="fas fa-users"></i> <span>영웅 관리</span>
                 </li>
                 <li data-tab="equipment">
                     <i class="fas fa-suitcase"></i> <span>장비 보관함</span>
                 </li>
+
+                <!-- Utilities -->
+                <li class="nav-header">유틸리티</li>
                 <li data-tab="contents">
                     <i class="fas fa-dungeon"></i> <span>세팅 최적화</span>
                 </li>
                 <li data-tab="presets">
                     <i class="fas fa-save"></i> <span>프리셋 관리</span>
                 </li>
-                <li data-tab="settings">
-                    <i class="fas fa-cog"></i> <span>설정</span>
+                <li data-tab="preset-share">
+                    <i class="fas fa-share-alt"></i> <span>프리셋 공유</span>
+                </li>
+                <li onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i> <span>로그아웃</span>
                 </li>
             </ul>
         </nav>

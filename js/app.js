@@ -67,6 +67,134 @@ window.checkGlobalCode = () => {
     }
 };
 
+// --- Heroes Logic ---
+async function loadHeroes() {
+    if (!AuthState.currentUser) return;
+
+    // Privacy Filter: Only my heroes
+    const { data, error } = await supabase
+        .from('heroes')
+        .select('*')
+        .eq('user_id', AuthState.currentUser.id)
+        .order('created_at', { ascending: false });
+
+    if (error) {
+        console.error('Error loading heroes:', error);
+        return;
+    }
+
+    const heroList = document.getElementById('hero-list');
+    heroList.innerHTML = '';
+
+    const heroCountEl = document.getElementById('hero-count');
+    if (heroCountEl) heroCountEl.textContent = data.length;
+
+    data.forEach(hero => {
+        const card = document.createElement('div');
+        card.className = 'hero-card card';
+
+        // Calculate total combat power (simple sum for now)
+        const cp = (hero.stats.atk || 0) + (hero.stats.def || 0) + (hero.stats.hp || 0);
+
+        card.innerHTML = `
+            <div class="card-header">
+                <h3>${hero.name}</h3>
+                <span class="badge ${hero.type === 'physical' ? 'badge-physical' : 'badge-magic'}">${hero.type === 'physical' ? '물리' : '마법'}</span>
+            </div>
+            <div class="card-body">
+                <div class="stat-row">
+                    <span>전투력</span>
+                    <strong>${cp.toLocaleString()}</strong>
+                </div>
+                <div class="stat-grid-mini">
+                    <div><span>공</span> ${hero.stats.atk || 0}</div>
+                    <div><span>방</span> ${hero.stats.def || 0}</div>
+                    <div><span>생</span> ${hero.stats.hp || 0}</div>
+                    <div><span>속</span> ${hero.stats.spd || 0}</div>
+                </div>
+            </div>
+            <div class="card-actions">
+                <button onclick="editHero('${hero.id}')"><i class="fas fa-edit"></i></button>
+                <button onclick="deleteHero('${hero.id}')" class="btn-icon-danger"><i class="fas fa-trash"></i></button>
+            </div>
+        `;
+        heroList.appendChild(card);
+    });
+}
+
+// ... inside hero form submit ...
+const heroData = {
+    user_id: AuthState.selectedMember.id, // Bind to current user
+    name: name,
+    type: type,
+    stats: stats
+};
+
+// --- Equipment Logic ---
+async function loadEquipments() {
+    if (!AuthState.currentUser) return;
+
+    const { data, error } = await supabase
+        .from('equipments')
+        .select('*')
+        .eq('user_id', AuthState.currentUser.id) // Only my equipment
+        .order('created_at', { ascending: false });
+
+    if (error) {
+        console.error('Error loading equipment:', error);
+        return;
+    }
+
+    const equipList = document.getElementById('equip-list');
+    equipList.innerHTML = '';
+
+    const equipCountEl = document.getElementById('equip-count');
+    if (equipCountEl) equipCountEl.textContent = data.length;
+
+    data.forEach(equip => {
+        const card = document.createElement('div');
+        card.className = 'equip-card card';
+
+        // Determine Icon
+        let icon = 'fa-khanda';
+        if (equip.category === 'armor') icon = 'fa-shield-alt';
+        else if (equip.category === 'weapon_magic') icon = 'fa-magic';
+
+        // Main Stat Display
+        let mainStatText = '';
+        if (equip.main_option) {
+            const mKey = Object.keys(equip.main_option)[0];
+            mainStatText = `${mKey} +${equip.main_option[mKey]}`;
+        }
+
+        card.innerHTML = `
+            <div class="equip-icon ${equip.category}">
+                <i class="fas ${icon}"></i>
+            </div>
+            <div class="equip-info">
+                <h4>${equip.name}</h4>
+                <p class="set-name">${equip.set_option || '세트 없음'}</p>
+                <p class="main-stat">${mainStatText}</p>
+            </div>
+            <div class="equip-actions">
+                <button onclick="deleteEquipment('${equip.id}')" class="btn-icon-danger"><i class="fas fa-trash"></i></button>
+            </div>
+            <div class="equip-detail-overlay" onclick="viewEquipDetail('${equip.id}')"></div>
+        `;
+        equipList.appendChild(card);
+    });
+}
+
+// ... inside equipment form submit ...
+const equipData = {
+    user_id: AuthState.selectedMember.id, // Bind to current user
+    name: name,
+    category: category,
+    set_option: setOption,
+    main_option: mainOpt,
+    sub_options: subOpts
+};
+
 async function loadMembers() {
     try {
         const { data, error } = await supabase
@@ -317,7 +445,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     initHelpUI();
 
     // Navigation Logic
-    const navLinks = document.querySelectorAll('.nav-links li');
+    const navLinks = document.querySelectorAll('.nav-links li[data-tab]');
     const sections = document.querySelectorAll('.section');
     const pageTitle = document.getElementById('page-title');
 
@@ -334,10 +462,13 @@ document.addEventListener('DOMContentLoaded', async () => {
             // Update Title
             const sectionTitles = {
                 'dashboard': '대시보드',
+                'guild-war': '길드전',
+                'total-war': '총력전',
                 'heroes': '영웅 관리',
                 'equipment': '장비 보관함',
                 'contents': '세팅 최적화',
                 'presets': '프리셋 관리',
+                'preset-share': '프리셋 공유',
                 'settings': '설정'
             };
             pageTitle.innerText = sectionTitles[tabName] || '매니저';
@@ -348,6 +479,24 @@ document.addEventListener('DOMContentLoaded', async () => {
             const targetSection = document.getElementById(`${tabName}-section`);
             if (targetSection) {
                 targetSection.style.display = 'block';
+            } else {
+                // Placeholder for missing sections
+                // Create a temporary placeholder if section doesn't exist
+                let placeholder = document.getElementById('placeholder-section');
+                if (!placeholder) {
+                    placeholder = document.createElement('div');
+                    placeholder.id = 'placeholder-section';
+                    placeholder.className = 'section';
+                    placeholder.innerHTML = `
+                        <div class="card" style="text-align:center; padding:50px;">
+                            <i class="fas fa-tools" style="font-size:3rem; color:var(--text-muted); margin-bottom:20px;"></i>
+                            <h2 style="color:var(--text-main);">준비 중인 기능입니다.</h2>
+                            <p style="color:var(--text-sub);">추후 업데이트될 예정입니다.</p>
+                        </div>
+                    `;
+                    document.getElementById('content-area').appendChild(placeholder);
+                }
+                placeholder.style.display = 'block';
             }
         });
     });

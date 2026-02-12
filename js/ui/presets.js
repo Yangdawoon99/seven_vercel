@@ -12,18 +12,29 @@ export async function initPresetsUI() {
 
 async function loadPresets() {
     try {
-        presets = await ApiService.getPresets();
+        // Migration: LS -> DB is deprecated in favor of clean slate or manual migration
+        // because we can't easily auto-migrate without knowing which user owns the LS data.
+        // For now, we just load from DB for current user.
 
-        // Migration: LS -> DB
-        const lsData = localStorage.getItem('sena_presets');
-        if (presets.length === 0 && lsData) {
-            console.log("Migrating presets from LocalStorage to DB...");
-            const lsPresets = JSON.parse(lsData);
-            for (const p of lsPresets) {
-                await ApiService.savePreset(p);
-            }
-            presets = await ApiService.getPresets();
-        }
+        const sessionUser = JSON.parse(localStorage.getItem('guild_user'));
+        if (!sessionUser) return;
+
+        const { data, error } = await supabase
+            .from('presets')
+            .select('*')
+            .eq('user_id', sessionUser.id)
+            .order('created_at', { ascending: false });
+
+        if (error) throw error;
+
+        // Parse JSON data field if necessary (Supabase returns JSONB as object automatically)
+        presets = data.map(p => ({
+            ...p.data,
+            id: p.id,
+            name: p.name,
+            user_id: p.user_id
+        }));
+
     } catch (err) {
         console.error("Failed to load presets:", err);
     }
