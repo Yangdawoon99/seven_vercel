@@ -69,7 +69,12 @@ window.checkGlobalCode = () => {
 
 // --- Heroes Logic ---
 async function loadHeroes() {
-    if (!AuthState.currentUser) return;
+    if (!AuthState.currentUser) {
+        // If not logged in, just clear the list and return silently
+        const heroList = document.getElementById('hero-list');
+        if (heroList) heroList.innerHTML = '<p style="text-align:center; padding:20px; color:#888;">로그인 후 이용 가능합니다.</p>';
+        return;
+    }
 
     // Privacy Filter: Only my heroes
     const { data, error } = await supabase
@@ -87,7 +92,12 @@ async function loadHeroes() {
     heroList.innerHTML = '';
 
     const heroCountEl = document.getElementById('hero-count');
-    if (heroCountEl) heroCountEl.textContent = data.length;
+    if (heroCountEl) heroCountEl.textContent = data.length || 0;
+
+    if (data.length === 0) {
+        heroList.innerHTML = '<p style="text-align:center; padding:20px; color:#888; grid-column:1/-1;">등록된 영웅이 없습니다.</p>';
+        return;
+    }
 
     data.forEach(hero => {
         const card = document.createElement('div');
@@ -132,7 +142,11 @@ const heroData = {
 
 // --- Equipment Logic ---
 async function loadEquipments() {
-    if (!AuthState.currentUser) return;
+    if (!AuthState.currentUser) {
+        const equipList = document.getElementById('equip-list');
+        if (equipList) equipList.innerHTML = '<p style="text-align:center; padding:20px; color:#888;">로그인 후 이용 가능합니다.</p>';
+        return;
+    }
 
     const { data, error } = await supabase
         .from('equipments')
@@ -149,7 +163,12 @@ async function loadEquipments() {
     equipList.innerHTML = '';
 
     const equipCountEl = document.getElementById('equip-count');
-    if (equipCountEl) equipCountEl.textContent = data.length;
+    if (equipCountEl) equipCountEl.textContent = data.length || 0;
+
+    if (data.length === 0) {
+        equipList.innerHTML = '<p style="text-align:center; padding:20px; color:#888; grid-column:1/-1;">등록된 장비가 없습니다.</p>';
+        return;
+    }
 
     data.forEach(equip => {
         const card = document.createElement('div');
