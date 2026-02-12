@@ -34,20 +34,77 @@
             const lock = document.getElementById('auth-lock');
             const input = document.getElementById('final-auth-input');
             const fail = document.getElementById('auth-fail-msg');
+            const btn = lock.querySelector('button');
+
+            // 실패 횟수 및 잠금 시간 관리
+            const getFailCount = () => parseInt(localStorage.getItem('auth_fail_count') || '0');
+            const setFailCount = (count) => localStorage.setItem('auth_fail_count', count.toString());
+            const getLockUntil = () => parseInt(localStorage.getItem('auth_lock_until') || '0');
+            const setLockUntil = (timestamp) => localStorage.setItem('auth_lock_until', timestamp.toString());
 
             const check = () => {
                 if (sessionStorage.getItem('sena_auth') === 'true') {
                     lock.style.display = 'none';
+                    return;
+                }
+
+                // 잠금 시간 확인
+                const lockUntil = getLockUntil();
+                const now = Date.now();
+
+                if (lockUntil > now) {
+                    const remainSec = Math.ceil((lockUntil - now) / 1000);
+                    const remainMin = Math.floor(remainSec / 60);
+                    input.disabled = true;
+                    btn.disabled = true;
+                    fail.style.display = 'block';
+                    fail.textContent = `너무 많은 시도로 인해 ${remainMin}분 ${remainSec % 60}초 후 재시도 가능합니다.`;
+
+                    setTimeout(check, 1000); // 1초마다 갱신
+                } else {
+                    input.disabled = false;
+                    btn.disabled = false;
                 }
             };
 
             window.confirmAuth = () => {
+                const lockUntil = getLockUntil();
+                const now = Date.now();
+
+                if (lockUntil > now) {
+                    return; // 잠금 중에는 시도 불가
+                }
+
                 if (input.value === code) {
                     sessionStorage.setItem('sena_auth', 'true');
+                    localStorage.removeItem('auth_fail_count');
+                    localStorage.removeItem('auth_lock_until');
                     lock.style.opacity = '0';
                     setTimeout(() => lock.style.display = 'none', 300);
                 } else {
-                    fail.style.display = 'block';
+                    const failCount = getFailCount() + 1;
+                    setFailCount(failCount);
+
+                    let lockMinutes = 0;
+                    if (failCount >= 10) {
+                        lockMinutes = 60; // 1시간
+                    } else if (failCount >= 5) {
+                        lockMinutes = 10; // 10분
+                    } else if (failCount >= 3) {
+                        lockMinutes = 1; // 1분
+                    }
+
+                    if (lockMinutes > 0) {
+                        setLockUntil(Date.now() + lockMinutes * 60 * 1000);
+                        fail.textContent = `${failCount}회 실패. ${lockMinutes}분 후 재시도 가능합니다.`;
+                        input.disabled = true;
+                        btn.disabled = true;
+                        setTimeout(check, 1000);
+                    } else {
+                        fail.textContent = `잘못된 코드입니다. (${failCount}/3)`;
+                        fail.style.display = 'block';
+                    }
+
                     input.value = '';
                     input.focus();
                 }
@@ -59,6 +116,8 @@
 
             window.resetSena = () => {
                 sessionStorage.removeItem('sena_auth');
+                localStorage.removeItem('auth_fail_count');
+                localStorage.removeItem('auth_lock_until');
                 location.reload();
             };
 
@@ -68,10 +127,33 @@
     <div class="app-container">
         <!-- Sidebar Navigation -->
         <nav class="sidebar">
-            <div class="logo">
-                <img src="assets/logo.jpg" alt="Sena-Re Logo"
-                    style="width: 100%; max-width: 150px; margin-bottom: 20px; border-radius: 10px; box-shadow: 0 0 15px rgba(102,252,241,0.2);">
-                <h2 style="display: none;">Sena-Re<br>Manager</h2>
+            <div class="logo"
+                style="text-align: center; padding: 25px 15px; border-bottom: 1px solid rgba(102, 252, 241, 0.1);">
+                <img src="assets/logo.jpg" alt="Sena-Re Logo" style="
+                    width: 90px; 
+                    height: 90px; 
+                    object-fit: contain; 
+                    margin: 0 auto 15px; 
+                    display: block;
+                    border-radius: 12px; 
+                    background: linear-gradient(135deg, rgba(27, 38, 49, 0.8), rgba(15, 20, 25, 0.9));
+                    padding: 8px;
+                    box-shadow: 
+                        0 4px 15px rgba(0, 0, 0, 0.4),
+                        0 0 20px rgba(102, 252, 241, 0.15),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+                    border: 1px solid rgba(102, 252, 241, 0.2);
+                    transition: all 0.3s ease;
+                ">
+                <h2 style="
+                    font-size: 0.95rem; 
+                    font-weight: 600; 
+                    letter-spacing: 1px;
+                    color: #66fcf1;
+                    margin: 0;
+                    text-transform: uppercase;
+                    text-shadow: 0 0 10px rgba(102, 252, 241, 0.3);
+                ">SENA-RE<br><span style="font-size: 0.75rem; color: #c5c6c7; font-weight: 400;">MANAGER</span></h2>
             </div>
             <ul class="nav-links">
                 <li class="active" data-tab="dashboard">
