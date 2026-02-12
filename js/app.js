@@ -1,12 +1,8 @@
-
 // Supabase Client Initialization
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+import SUPABASE_CONFIG from './supabase_config.js';
 
-// TODO: User must provide these keys in a real environment. 
-// For now, we will use placeholders or ask user to provide them.
-const SUPABASE_URL = 'YOUR_SUPABASE_URL';
-const SUPABASE_KEY = 'YOUR_SUPABASE_ANON_KEY';
-const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+const supabase = createClient(SUPABASE_CONFIG.url, SUPABASE_CONFIG.anonKey);
 
 // --- Auth State Management ---
 const AuthState = {
