@@ -7,8 +7,8 @@
     --primary-dark: #a13d4f;
     --secondary: #c5a4a8;
     --accent: #ff6b9d;
-    --text-main: #f5e6e8;
-    --text-muted: #9b8589;
+    --text-main: #e8e8e8;
+    --text-muted: #a0a0a0;
     --border-color: #2d2428;
     --success: #6b9d57;
     --warning: #d49557;
@@ -33,7 +33,7 @@
 
 body {
     font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
-    background: linear-gradient(135deg, #0b0c10 0%, #1a1d26 100%);
+    background: linear-gradient(135deg, #0d0a0b 0%, #15111a 100%);
     color: var(--text-main);
     overflow: hidden;
     line-height: 1.6;
@@ -120,7 +120,7 @@ body {
     flex: 1;
     display: flex;
     flex-direction: column;
-    background: linear-gradient(135deg, #0f1419 0%, #1a1d26 50%, #0b0c10 100%);
+    background: linear-gradient(135deg, #0d0a0b 0%, #15111a 50%, #0d0a0b 100%);
     position: relative;
     overflow: hidden;
 }
