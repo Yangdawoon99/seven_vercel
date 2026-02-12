@@ -1,17 +1,11 @@
 // Supabase Client Initialization
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
 import SUPABASE_CONFIG from './supabase_config.js';
+import { AuthState } from './services/auth.js';
 
 const supabase = createClient(SUPABASE_CONFIG.url, SUPABASE_CONFIG.anonKey);
-
-// --- Auth State Management ---
-const AuthState = {
-    step: 'global', // global, member
-    globalCode: 'senafinal0522',
-    selectedMember: null,
-    tempPin: null, // For first time setup confirmation
-    currentUser: null
-};
+// Make supabase global for other modules if needed (or prefer importing config in services)
+window.supabase = supabase;
 
 // --- DOM Elements ---
 const dom = {
@@ -67,70 +61,9 @@ window.checkGlobalCode = () => {
     }
 };
 
-// --- Heroes Logic ---
-async function loadHeroes() {
-    if (!AuthState.currentUser) {
-        // If not logged in, just clear the list and return silently
-        const heroList = document.getElementById('hero-list');
-        if (heroList) heroList.innerHTML = '<p style="text-align:center; padding:20px; color:#888;">로그인 후 이용 가능합니다.</p>';
-        return;
-    }
-
-    // Privacy Filter: Only my heroes
-    const { data, error } = await supabase
-        .from('heroes')
-        .select('*')
-        .eq('user_id', AuthState.currentUser.id)
-        .order('created_at', { ascending: false });
-
-    if (error) {
-        console.error('Error loading heroes:', error);
-        return;
-    }
-
-    const heroList = document.getElementById('hero-list');
-    heroList.innerHTML = '';
-
-    const heroCountEl = document.getElementById('hero-count');
-    if (heroCountEl) heroCountEl.textContent = data.length || 0;
-
-    if (data.length === 0) {
-        heroList.innerHTML = '<p style="text-align:center; padding:20px; color:#888; grid-column:1/-1;">등록된 영웅이 없습니다.</p>';
-        return;
-    }
-
-    data.forEach(hero => {
-        const card = document.createElement('div');
-        card.className = 'hero-card card';
-
-        // Calculate total combat power (simple sum for now)
-        const cp = (hero.stats.atk || 0) + (hero.stats.def || 0) + (hero.stats.hp || 0);
-
-        card.innerHTML = `
-            <div class="card-header">
-                <h3>${hero.name}</h3>
-                <span class="badge ${hero.type === 'physical' ? 'badge-physical' : 'badge-magic'}">${hero.type === 'physical' ? '물리' : '마법'}</span>
-            </div>
-            <div class="card-body">
-                <div class="stat-row">
-                    <span>전투력</span>
-                    <strong>${cp.toLocaleString()}</strong>
-                </div>
-                <div class="stat-grid-mini">
-                    <div><span>공</span> ${hero.stats.atk || 0}</div>
-                    <div><span>방</span> ${hero.stats.def || 0}</div>
-                    <div><span>생</span> ${hero.stats.hp || 0}</div>
-                    <div><span>속</span> ${hero.stats.spd || 0}</div>
-                </div>
-            </div>
-            <div class="card-actions">
-                <button onclick="editHero('${hero.id}')"><i class="fas fa-edit"></i></button>
-                <button onclick="deleteHero('${hero.id}')" class="btn-icon-danger"><i class="fas fa-trash"></i></button>
-            </div>
-        `;
-        heroList.appendChild(card);
-    });
-}
+// --- Modules handle their own data loading ---
+// import { loadHeroes } from './ui/heroes.js'; // managed by initHeroesUI
+// import { loadEquipments } from './ui/equipment.js'; // managed by initEquipmentUI
 
 // ... inside hero form submit ...
 const heroData = {
@@ -139,70 +72,6 @@ const heroData = {
     type: type,
     stats: stats
 };
-
-// --- Equipment Logic ---
-async function loadEquipments() {
-    if (!AuthState.currentUser) {
-        const equipList = document.getElementById('equip-list');
-        if (equipList) equipList.innerHTML = '<p style="text-align:center; padding:20px; color:#888;">로그인 후 이용 가능합니다.</p>';
-        return;
-    }
-
-    const { data, error } = await supabase
-        .from('equipments')
-        .select('*')
-        .eq('user_id', AuthState.currentUser.id) // Only my equipment
-        .order('created_at', { ascending: false });
-
-    if (error) {
-        console.error('Error loading equipment:', error);
-        return;
-    }
-
-    const equipList = document.getElementById('equip-list');
-    equipList.innerHTML = '';
-
-    const equipCountEl = document.getElementById('equip-count');
-    if (equipCountEl) equipCountEl.textContent = data.length || 0;
-
-    if (data.length === 0) {
-        equipList.innerHTML = '<p style="text-align:center; padding:20px; color:#888; grid-column:1/-1;">등록된 장비가 없습니다.</p>';
-        return;
-    }
-
-    data.forEach(equip => {
-        const card = document.createElement('div');
-        card.className = 'equip-card card';
-
-        // Determine Icon
-        let icon = 'fa-khanda';
-        if (equip.category === 'armor') icon = 'fa-shield-alt';
-        else if (equip.category === 'weapon_magic') icon = 'fa-magic';
-
-        // Main Stat Display
-        let mainStatText = '';
-        if (equip.main_option) {
-            const mKey = Object.keys(equip.main_option)[0];
-            mainStatText = `${mKey} +${equip.main_option[mKey]}`;
-        }
-
-        card.innerHTML = `
-            <div class="equip-icon ${equip.category}">
-                <i class="fas ${icon}"></i>
-            </div>
-            <div class="equip-info">
-                <h4>${equip.name}</h4>
-                <p class="set-name">${equip.set_option || '세트 없음'}</p>
-                <p class="main-stat">${mainStatText}</p>
-            </div>
-            <div class="equip-actions">
-                <button onclick="deleteEquipment('${equip.id}')" class="btn-icon-danger"><i class="fas fa-trash"></i></button>
-            </div>
-            <div class="equip-detail-overlay" onclick="viewEquipDetail('${equip.id}')"></div>
-        `;
-        equipList.appendChild(card);
-    });
-}
 
 // ... inside equipment form submit ...
 const equipData = {

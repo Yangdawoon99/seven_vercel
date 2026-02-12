@@ -2,6 +2,7 @@ import { STAT_LABELS } from '/js/utils/constants.js';
 import { heroes } from '/data/heroes.js';
 import { ApiService } from '/js/services/api.js';
 import { userEquipment } from './equipment.js'; // Added for index lookup
+import { getCurrentUserId } from '/js/services/auth.js';
 
 export let presets = [];
 
@@ -12,17 +13,16 @@ export async function initPresetsUI() {
 
 async function loadPresets() {
     try {
-        // Migration: LS -> DB is deprecated in favor of clean slate or manual migration
-        // because we can't easily auto-migrate without knowing which user owns the LS data.
-        // For now, we just load from DB for current user.
-
-        const sessionUser = JSON.parse(localStorage.getItem('guild_user'));
-        if (!sessionUser) return;
+        const userId = getCurrentUserId();
+        if (!userId) {
+            presets = [];
+            return;
+        }
 
         const { data, error } = await supabase
             .from('presets')
             .select('*')
-            .eq('user_id', sessionUser.id)
+            .eq('user_id', userId)
             .order('created_at', { ascending: false });
 
         if (error) throw error;
@@ -37,19 +37,33 @@ async function loadPresets() {
 
     } catch (err) {
         console.error("Failed to load presets:", err);
+        presets = [];
     }
 }
 
 export async function savePreset(name, heroId, weapons, armors, tag = 'PVE') {
+    const userId = getCurrentUserId();
+    if (!userId) {
+        alert('로그인이 필요합니다.');
+        return;
+    }
+
     const newPreset = {
         id: `preset_${Date.now()}`,
+        user_id: userId,
         name,
         heroId,
         tag, // PVP, PVE, Raid, etc.
         weapons: JSON.parse(JSON.stringify(weapons)), // Deep copy 
         armors: JSON.parse(JSON.stringify(armors)),
     };
-    await ApiService.savePreset(newPreset);
+    const { error } = await supabase.from('presets').insert(newPreset);
+    if (error) {
+        console.error('Failed to save preset:', error);
+        alert('프리셋 저장 실패: ' + error.message);
+        return;
+    }
+
     presets.push(newPreset);
     renderPresetList();
 }
@@ -139,7 +153,12 @@ window.showPresetItemDetail = (presetId, label) => {
 
 window.deletePreset = async (id) => {
     if (confirm('이 프리셋을 삭제하시겠습니까?')) {
-        await ApiService.deletePreset(id);
+        const { error } = await supabase.from('presets').delete().eq('id', id);
+        if (error) {
+            console.error('Failed to delete preset:', error);
+            alert('삭제 실패: ' + error.message);
+            return;
+        }
         presets = presets.filter(p => p.id !== id);
         renderPresetList();
     }

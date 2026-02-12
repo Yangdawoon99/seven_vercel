@@ -1,6 +1,7 @@
 import { equipmentData } from '/data/equipment.js';
 import { ApiService } from '/js/services/api.js';
 import { STAT_LABELS, SET_LABELS } from '/js/utils/constants.js';
+import { getCurrentUserId } from '/js/services/auth.js';
 
 // Change to let to allow reassignment
 export let userEquipment = []; // Local cache
@@ -49,55 +50,38 @@ export async function initEquipmentUI() {
 
 async function loadEquipment() {
     try {
-        userEquipment = await ApiService.getEquipment();
+        const userId = getCurrentUserId();
+        if (!userId) {
+            userEquipment = []; // Clear if not logged in
+            return;
+        }
 
-        // Data Cleansing: Fix broken set data from previous bugs
+        const { data, error } = await supabase
+            .from('equipments')
+            .select('*')
+            .eq('user_id', userId)
+            .order('created_at', { ascending: false });
+
+        if (error) throw error;
+        userEquipment = data;
+
+        // Data Cleansing: Fix broken set data from previous bugs (Optional, kept for safety)
         let needsFix = false;
         for (let eq of userEquipment) {
-            // Unify set and set_name in local cache
-            eq.set = eq.set_name || eq.set;
-
             if (!eq.set || eq.set === 'undefined') {
-                console.log(`Fixing equipment ${eq.id} set to avenger`);
                 eq.set = 'avenger';
-                eq.set_name = 'avenger';
-                await ApiService.saveEquipment(eq);
+                await supabase.from('equipments').upsert(eq);
                 needsFix = true;
             }
         }
-        if (needsFix) userEquipment = await ApiService.getEquipment();
-        const lsData = localStorage.getItem('sena_equip');
-        if (userEquipment.length < 5 && lsData) {
-            console.log("Migrating equipment from LocalStorage to DB...");
-            const lsEquip = JSON.parse(lsData);
-            for (const item of lsEquip) {
-                await ApiService.saveEquipment(item);
-            }
-            userEquipment = await ApiService.getEquipment();
+        if (needsFix) {
+            const { data: fixedData } = await supabase.from('equipments').select('*').eq('user_id', userId);
+            userEquipment = fixedData;
         }
 
-        // Seeding if still empty (minimal demo data)
-        if (userEquipment.length === 0) {
-            console.log("Seeding initial equipment data...");
-            const seed = [
-                {
-                    id: "eq_seed_1",
-                    category: "weapon",
-                    subType: "magic",
-                    name: "빛나는 히드라의 지팡이",
-                    set: "assassin",
-                    isEquipped: false,
-                    grade: 6,
-                    enhance: 15,
-                    mainOption: { name: "magic_attack", value: 304 },
-                    subOptions: [{ name: "speed", value: 5 }]
-                }
-            ];
-            for (const item of seed) await ApiService.saveEquipment(item);
-            userEquipment = await ApiService.getEquipment();
-        }
     } catch (err) {
         console.error("Failed to load equipment:", err);
+        userEquipment = [];
     }
 }
 
@@ -321,7 +305,12 @@ function setupEventListeners() {
             if (id && confirm('정말로 이 장비를 삭제하시겠습니까?')) {
                 const index = userEquipment.findIndex(e => e.id === id);
                 if (index > -1) {
-                    await ApiService.deleteEquipment(id);
+                    const { error } = await supabase.from('equipments').delete().eq('id', id);
+                    if (error) {
+                        console.error('Failed to delete equipment:', error);
+                        alert('삭제 실패: ' + error.message);
+                        return;
+                    }
                     userEquipment.splice(index, 1);
                     renderEquipList();
                     if (modal) modal.style.display = 'none';
@@ -361,10 +350,17 @@ function setupEventListeners() {
                 equip = userEquipment.find(e => e.id === editId);
                 if (equip) {
                     Object.assign(equip, { category, subType, name, set, mainOption: { name: mainOpt, value: mainVal }, subOptions: subOpts });
+                    if (!equip.user_id) equip.user_id = getCurrentUserId();
                 }
             } else {
+                const userId = getCurrentUserId();
+                if (!userId) {
+                    alert('로그인이 필요합니다.');
+                    return;
+                }
                 equip = {
                     id: `eq_${Date.now()}`,
+                    user_id: userId,
                     category,
                     subType,
                     name,
@@ -378,7 +374,16 @@ function setupEventListeners() {
                 userEquipment.push(equip);
             }
 
-            await ApiService.saveEquipment(equip);
+            const { error } = await supabase
+                .from('equipments')
+                .upsert(equip);
+
+            if (error) {
+                console.error('Failed to save equipment:', error);
+                alert('저장 실패: ' + error.message);
+                return;
+            }
+
             renderEquipList();
             if (modal) modal.style.display = 'none';
             form.reset();

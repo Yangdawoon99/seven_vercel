@@ -4,12 +4,22 @@ import { optimizeEquipment } from '/js/core/optimizer.js';
 import { STAT_LABELS } from '/js/utils/constants.js';
 import { savePreset } from './presets.js';
 import { userEquipment } from './equipment.js';
+import { getCurrentUserId } from '/js/services/auth.js';
 
 let heroes = [];
 
 export async function initContentsUI() {
     try {
-        heroes = await ApiService.getHeroes();
+        const userId = getCurrentUserId();
+        if (userId) {
+            const { data, error } = await supabase
+                .from('heroes')
+                .select('*')
+                .eq('user_id', userId)
+                .order('created_at', { ascending: false });
+
+            if (!error) heroes = data;
+        }
     } catch (e) {
         console.error("ContentsUI: Failed to fetch heroes", e);
     }

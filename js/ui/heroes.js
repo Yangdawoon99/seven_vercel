@@ -2,6 +2,7 @@ import { heroes as staticHeroes } from '/data/heroes.js';
 import { equipmentData } from '/data/equipment.js'; // Need options list
 import { ApiService } from '/js/services/api.js';
 import { STAT_LABELS } from '/js/utils/constants.js';
+import { getCurrentUserId } from '/js/services/auth.js';
 
 let heroes = []; // Local cache for efficiency
 
@@ -13,42 +14,27 @@ export async function initHeroesUI() {
 
 async function loadHeroes() {
     try {
-        heroes = await ApiService.getHeroes();
-
-        // Migration: If DB is empty but LS has data, migrate it
-        const lsData = localStorage.getItem('sena_heroes');
-        if (heroes.length === 0 && lsData) {
-            console.log("Migrating heroes from LocalStorage to DB...");
-            const lsHeroes = JSON.parse(lsData);
-            for (const h of lsHeroes) {
-                await ApiService.saveHero(h);
-            }
-            heroes = await ApiService.getHeroes();
-            // Optional: localStorage.removeItem('sena_heroes'); // Keep for safety until confirmed
+        const userId = getCurrentUserId();
+        if (!userId) {
+            heroes = []; // Clear if not logged in
+            return;
         }
 
-        // If still empty, use static seed data
-        if (heroes.length === 0) {
-            console.log("Seeding heroes from static data...");
-            for (const h of staticHeroes) {
-                await ApiService.saveHero(h);
-            }
-            heroes = await ApiService.getHeroes();
-        }
+        // Fetch using Supabase directly or via updated ApiService
+        // Assuming ApiService needs update or we use direct call here for speed
+        const { data, error } = await supabase
+            .from('heroes')
+            .select('*')
+            .eq('user_id', userId)
+            .order('created_at', { ascending: false });
 
-        // Force Level 30 for all existing heroes
-        let changed = false;
-        for (let h of heroes) {
-            if (h.level !== 30) {
-                h.level = 30;
-                await ApiService.saveHero(h);
-                changed = true;
-            }
-        }
-        if (changed) heroes = await ApiService.getHeroes();
+        if (error) throw error;
+        heroes = data;
+
+        // ... rest of logic (migration/seeding removed as DB is now source of truth)
     } catch (err) {
         console.error("Failed to load heroes:", err);
-        heroes = staticHeroes; // Fallback
+        heroes = [];
     }
 }
 
@@ -77,7 +63,12 @@ function setupEventListeners() {
         if (id && confirm('정말로 이 영웅을 삭제하시겠습니까?')) {
             const index = heroes.findIndex(h => h.id === id);
             if (index > -1) {
-                await ApiService.deleteHero(id);
+                const { error } = await supabase.from('heroes').delete().eq('id', id);
+                if (error) {
+                    console.error('Failed to delete hero:', error);
+                    alert('삭제 실패: ' + error.message);
+                    return;
+                }
                 heroes.splice(index, 1);
                 renderHeroList();
                 modal.style.display = 'none';
@@ -107,18 +98,45 @@ function setupEventListeners() {
         };
 
         let hero;
+        let isUpdate = false;
+
         if (idInput) {
             hero = heroes.find(h => h.id === idInput);
             if (hero) {
                 Object.assign(hero, { name, type, stats, level: 30 });
+                // Ensure user_id is preserved or added if missing
+                if (!hero.user_id) hero.user_id = getCurrentUserId();
+                isUpdate = true;
             }
         } else {
+            const userId = getCurrentUserId();
+            if (!userId) {
+                alert('로그인이 필요합니다.');
+                return;
+            }
             const newId = name.toLowerCase().replace(/\s/g, '_') + '_' + Date.now();
-            hero = { id: newId, name, type, level: 30, stats, priority: [] };
+            hero = {
+                id: newId,
+                user_id: userId,
+                name,
+                type,
+                level: 30,
+                stats,
+                priority: []
+            };
             heroes.push(hero);
         }
 
-        await ApiService.saveHero(hero);
+        const { error } = await supabase
+            .from('heroes')
+            .upsert(hero); // Upsert handles both insert and update based on PK
+
+        if (error) {
+            console.error('Failed to save hero:', error);
+            alert('저장 실패: ' + error.message);
+            return;
+        }
+
         renderHeroList();
         modal.style.display = 'none';
         form.reset();
