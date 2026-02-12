@@ -182,31 +182,39 @@ function updatePinInstruction() {
     if (dom.authMsg) dom.authMsg.textContent = '';
 }
 
+const MAX_FAIL_ATTEMPTS = 5;
+const LOCKOUT_DURATION_MS = 5 * 60 * 1000; // 5 minutes
+
 async function handleLoginAction() {
     const enteredPin = Array.from(dom.pinDigits).map(input => input.value).join('');
     if (enteredPin.length !== 4) {
-        // Don't show error immediately on typing, only on button click if incomplete
-        // But for auto-submit logic, just return silently unless triggered by button
         return;
     }
 
     const member = AuthState.selectedMember;
 
+    // Check Lockout Status
+    const lockKey = `lock_${member.id}`;
+    const failKey = `fail_${member.id}`;
+    const lockUntil = parseInt(localStorage.getItem(lockKey) || '0');
+
+    if (Date.now() < lockUntil) {
+        const remainingMin = Math.ceil((lockUntil - Date.now()) / 60000);
+        dom.authMsg.textContent = `비밀번호 오류 과다. ${remainingMin}분 후 재시도 가능합니다.`;
+        resetPinInputs(false);
+        return;
+    }
+
     if (!member.hasPin) {
-        // First Time Setup Flow
+        // First Time Setup Flow (No lockout needed for setup)
         if (!AuthState.tempPin) {
-            // First entry
             AuthState.tempPin = enteredPin;
-            // Clear inputs ONLY, keep state
             dom.pinDigits.forEach(input => input.value = '');
             dom.pinDigits[0].focus();
-
             updatePinInstruction();
             dom.authMsg.textContent = '';
         } else {
-            // Confirmation entry
             if (AuthState.tempPin === enteredPin) {
-                // Success! Save to DB
                 try {
                     const { error } = await supabase
                         .from('guild_members')
@@ -224,7 +232,6 @@ async function handleLoginAction() {
                     updatePinInstruction();
                 }
             } else {
-                // Mismatch
                 dom.authMsg.textContent = 'PIN 번호가 일치하지 않습니다. 처음부터 다시 설정하세요.';
                 AuthState.tempPin = null;
                 resetPinInputs(true);
@@ -234,7 +241,6 @@ async function handleLoginAction() {
     } else {
         // Normal Login Flow
         try {
-            // Verify PIN against DB
             const { data, error } = await supabase
                 .from('guild_members')
                 .select('pin_code')
@@ -244,13 +250,25 @@ async function handleLoginAction() {
             if (error) throw error;
 
             if (data.pin_code === enteredPin) {
-                // Login Success
+                // Success - Reset Fail Count
+                localStorage.removeItem(failKey);
+                localStorage.removeItem(lockKey);
+
                 await supabase.from('guild_members').update({ last_login: new Date() }).eq('id', member.id);
                 loginSuccess(member);
             } else {
-                dom.authMsg.textContent = '잘못된 PIN 번호입니다.';
-                resetPinInputs(false); // Clear inputs, keep user selection
-                dom.authMsg.textContent = '잘못된 PIN 번호입니다.'; // Re-set msg after clear
+                // Fail - Increment Count
+                const currentFail = parseInt(localStorage.getItem(failKey) || '0') + 1;
+                localStorage.setItem(failKey, currentFail);
+
+                if (currentFail >= MAX_FAIL_ATTEMPTS) {
+                    localStorage.setItem(lockKey, Date.now() + LOCKOUT_DURATION_MS);
+                    dom.authMsg.textContent = `5회 오류! 5분간 로그인이 제한됩니다.`;
+                } else {
+                    dom.authMsg.textContent = `잘못된 PIN 번호입니다. (${currentFail}/${MAX_FAIL_ATTEMPTS})`;
+                }
+
+                resetPinInputs(false);
             }
         } catch (e) {
             dom.authMsg.textContent = '로그인 오류: ' + e.message;
