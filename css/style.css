@@ -174,10 +174,7 @@ body {
 .top-bar h1 {
     font-size: 1.75rem;
     font-weight: 700;
-    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: var(--text-main);
 }
 
 .user-actions {
@@ -221,7 +218,7 @@ body {
 
 .profile span {
     font-weight: 600;
-    color: var(--primary);
+    color: var(--text-main);
 }
 
 #content-area {
@@ -297,7 +294,7 @@ body {
 .widget .count {
     font-size: 2.5rem;
     font-weight: 800;
-    background: linear-gradient(135deg, var(--primary), var(--text-main));
+    background: linear-gradient(135deg, var(--text-main), #ffffff);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -344,10 +341,7 @@ body {
 .section-header h2 {
     font-size: 1.75rem;
     font-weight: 700;
-    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: var(--text-main);
 }
 
 /* ========== BUTTONS ========== */
@@ -606,7 +600,7 @@ body {
 
 .filter-group label {
     font-size: 0.95em;
-    color: var(--primary);
+    color: var(--text-sub);
     font-weight: 700;
     display: flex;
     align-items: center;
@@ -633,7 +627,7 @@ body {
 }
 
 .chip:hover {
-    border-color: var(--primary);
+    border-color: var(--text-main);
     background: rgba(153, 0, 0, 0.1);
     color: var(--text-main);
     transform: translateY(-2px);
