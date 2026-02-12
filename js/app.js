@@ -16,16 +16,24 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const checkAuth = () => {
         const isAuth = sessionStorage.getItem('sena_auth') === 'true';
+        console.log("Auth Check Status:", isAuth);
+        if (!authOverlay) {
+            console.error("Auth Overlay Element NOT FOUND in DOM!");
+            return;
+        }
         if (isAuth) {
             authOverlay.style.display = 'none';
         } else {
-            authOverlay.style.display = 'flex';
+            authOverlay.style.setProperty('display', 'flex', 'important');
+            authOverlay.style.opacity = '1';
         }
     };
 
     const handleAuth = () => {
+        console.log("Attempting Auth with code...");
         if (authInput.value === AUTH_CODE) {
             sessionStorage.setItem('sena_auth', 'true');
+            authOverlay.style.transition = 'opacity 0.5s';
             authOverlay.style.opacity = '0';
             setTimeout(() => { authOverlay.style.display = 'none'; }, 500);
         } else {
@@ -35,10 +43,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     };
 
-    authBtn.addEventListener('click', handleAuth);
-    authInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') handleAuth();
-    });
+    if (authBtn) authBtn.addEventListener('click', handleAuth);
+    if (authInput) {
+        authInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') handleAuth();
+        });
+    }
 
     checkAuth();
 

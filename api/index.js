@@ -10,7 +10,23 @@ app.use(bodyParser.json());
 // Supabase Connection
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_KEY;
-const supabase = createClient(supabaseUrl, supabaseKey);
+
+if (!supabaseUrl || !supabaseKey) {
+    console.error("Missing Supabase Environment Variables!");
+}
+
+const supabase = (supabaseUrl && supabaseKey) ? createClient(supabaseUrl, supabaseKey) : null;
+
+// Helper for Supabase check
+const checkSupabase = (res) => {
+    if (!supabase) {
+        return res.status(500).json({
+            error: "Backend Configuration Error",
+            details: "SUPABASE_URL or SUPABASE_KEY is missing in Vercel Environment Variables."
+        });
+    }
+    return false;
+};
 
 // --- Heroes API ---
 app.get('/api/heroes', async (req, res) => {
@@ -20,9 +36,10 @@ app.get('/api/heroes', async (req, res) => {
 });
 
 app.post('/api/heroes', async (req, res) => {
+    if (checkSupabase(res)) return;
     const hero = req.body;
     const { data, error } = await supabase.from('heroes').upsert(hero);
-    if (error) return res.status(500).json({ error: error.message });
+    if (error) return res.status(500).json({ error: error.message, details: "Check if 'heroes' table exists in Supabase." });
     res.json({ message: 'Hero saved', data });
 });
 
@@ -40,10 +57,10 @@ app.get('/api/equipment', async (req, res) => {
 });
 
 app.post('/api/equipment', async (req, res) => {
+    if (checkSupabase(res)) return;
     const equip = req.body;
-    // Map fields if necessary or use JSONB
     const { data, error } = await supabase.from('equipment').upsert(equip);
-    if (error) return res.status(500).json({ error: error.message });
+    if (error) return res.status(500).json({ error: error.message, details: "Check if 'equipment' table exists in Supabase." });
     res.json({ message: 'Equipment saved', data });
 });
 
