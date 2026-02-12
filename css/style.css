@@ -1,28 +1,45 @@
 :root {
-    /* Dark Red Color Palette - Eye-friendly */
-    --bg-dark: #0d0a0b;
-    --bg-panel: #1a1315;
-    --bg-card: #15111a;
-    --primary: #d4576d;
-    --primary-dark: #a13d4f;
-    --secondary: #c5a4a8;
-    --accent: #ff6b9d;
-    --text-main: #e8e8e8;
-    --text-muted: #a0a0a0;
-    --border-color: #2d2428;
+    /* Dark Red Point & Dark Silver Text Palette */
+    --bg-dark: #0a0a0a;
+    /* Neutral Dark */
+    --bg-panel: #141414;
+    /* Slightly lighter dark */
+    --bg-card: #1a1a1a;
+    /* Card background */
+
+    --primary: #990000;
+    /* Dark Red (Point) - "Geom-bul-geun" */
+    --primary-dark: #660000;
+    /* Darker Red */
+    --secondary: #808080;
+    /* Silver/Gray */
+
+    --accent: #cc0000;
+    /* Brighter Red for highlights */
+
+    --text-main: #c0c0c0;
+    /* Dark Silver (Text) */
+    --text-muted: #808080;
+    /* Muted Silver */
+
+    --border-color: #333333;
+    /* Dark Grey Border */
+
     --success: #6b9d57;
     --warning: #d49557;
-    --danger: #d45757;
+    --danger: #b71c1c;
+    /* Match danger with dark red theme */
 
     /* Glass Effect */
-    --glass-bg: rgba(26, 19, 21, 0.75);
-    --glass-border: 1px solid rgba(212, 87, 109, 0.1);
+    --glass-bg: rgba(20, 20, 20, 0.85);
+    --glass-border: 1px solid rgba(153, 0, 0, 0.2);
 
     /* Shadows */
-    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.25);
-    --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.35);
-    --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.45);
-    --shadow-glow: 0 0 20px rgba(212, 87, 109, 0.15);
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.4);
+    --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.5);
+    --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.6);
+    --shadow-glow: 0 0 15px rgba(153, 0, 0, 0.2);
+    /* Red Glow */
 }
 
 * {
@@ -33,7 +50,7 @@
 
 body {
     font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
-    background: linear-gradient(135deg, #0d0a0b 0%, #15111a 100%);
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
     color: var(--text-main);
     overflow: hidden;
     line-height: 1.6;
@@ -48,7 +65,7 @@ body {
 .sidebar {
     width: 260px;
     background: linear-gradient(180deg, var(--bg-panel) 0%, var(--bg-dark) 100%);
-    border-right: 1px solid rgba(212, 87, 109, 0.1);
+    border-right: 1px solid rgba(153, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
     padding: 0;
@@ -110,7 +127,7 @@ body {
 
 .nav-links li:hover,
 .nav-links li.active {
-    background: linear-gradient(90deg, rgba(212, 87, 109, 0.1), transparent);
+    background: linear-gradient(90deg, rgba(153, 0, 0, 0.1), transparent);
     color: var(--primary);
     transform: translateX(4px);
 }
@@ -120,7 +137,7 @@ body {
     flex: 1;
     display: flex;
     flex-direction: column;
-    background: linear-gradient(135deg, #0d0a0b 0%, #15111a 50%, #0d0a0b 100%);
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #0a0a0a 100%);
     position: relative;
     overflow: hidden;
 }
@@ -132,7 +149,7 @@ body {
     right: 0;
     width: 600px;
     height: 600px;
-    background: radial-gradient(circle, rgba(212, 87, 109, 0.05) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(153, 0, 0, 0.05) 0%, transparent 70%);
     pointer-events: none;
 }
 
@@ -142,8 +159,8 @@ body {
     align-items: center;
     justify-content: space-between;
     padding: 0 35px;
-    border-bottom: 1px solid rgba(212, 87, 109, 0.08);
-    background: rgba(31, 40, 51, 0.6);
+    border-bottom: 1px solid rgba(153, 0, 0, 0.08);
+    background: rgba(30, 30, 30, 0.6);
     backdrop-filter: blur(20px);
     z-index: 5;
 }
@@ -164,8 +181,8 @@ body {
 }
 
 .icon-btn {
-    background: rgba(212, 87, 109, 0.1);
-    border: 1px solid rgba(212, 87, 109, 0.2);
+    background: rgba(153, 0, 0, 0.1);
+    border: 1px solid rgba(153, 0, 0, 0.2);
     color: var(--primary);
     font-size: 1.2rem;
     cursor: pointer;
@@ -179,7 +196,7 @@ body {
 }
 
 .icon-btn:hover {
-    background: rgba(212, 87, 109, 0.2);
+    background: rgba(153, 0, 0, 0.2);
     transform: translateY(-2px);
     box-shadow: var(--shadow-glow);
 }
@@ -189,9 +206,9 @@ body {
     align-items: center;
     gap: 12px;
     padding: 8px 16px;
-    background: rgba(212, 87, 109, 0.05);
+    background: rgba(153, 0, 0, 0.05);
     border-radius: 12px;
-    border: 1px solid rgba(212, 87, 109, 0.1);
+    border: 1px solid rgba(153, 0, 0, 0.1);
 }
 
 .profile span {
@@ -217,12 +234,12 @@ body {
 }
 
 #content-area::-webkit-scrollbar-thumb {
-    background: rgba(212, 87, 109, 0.3);
+    background: rgba(153, 0, 0, 0.3);
     border-radius: 4px;
 }
 
 #content-area::-webkit-scrollbar-thumb:hover {
-    background: rgba(212, 87, 109, 0.5);
+    background: rgba(153, 0, 0, 0.5);
 }
 
 /* ========== DASHBOARD WIDGETS ========== */
@@ -234,8 +251,8 @@ body {
 }
 
 .widget {
-    background: linear-gradient(145deg, rgba(31, 40, 51, 0.8), rgba(26, 29, 38, 0.6));
-    border: 1px solid rgba(212, 87, 109, 0.15);
+    background: linear-gradient(145deg, rgba(30, 30, 30, 0.8), rgba(25, 25, 25, 0.6));
+    border: 1px solid rgba(153, 0, 0, 0.15);
     border-radius: 16px;
     padding: 24px;
     box-shadow: var(--shadow-md);
@@ -272,7 +289,7 @@ body {
 .widget .count {
     font-size: 2.5rem;
     font-weight: 800;
-    background: linear-gradient(135deg, var(--primary), #45a29e);
+    background: linear-gradient(135deg, var(--primary), var(--text-main));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -280,8 +297,8 @@ body {
 
 /* ========== CARDS ========== */
 .card {
-    background: linear-gradient(145deg, rgba(31, 40, 51, 0.8), rgba(26, 29, 38, 0.6));
-    border: 1px solid rgba(212, 87, 109, 0.12);
+    background: linear-gradient(145deg, rgba(30, 30, 30, 0.8), rgba(25, 25, 25, 0.6));
+    border: 1px solid rgba(153, 0, 0, 0.12);
     border-radius: 16px;
     padding: 24px;
     box-shadow: var(--shadow-md);
@@ -289,7 +306,7 @@ body {
 }
 
 .card:hover {
-    border-color: rgba(212, 87, 109, 0.3);
+    border-color: rgba(153, 0, 0, 0.3);
 }
 
 /* ========== SECTIONS ========== */
@@ -393,7 +410,7 @@ body {
     position: relative;
     overflow: hidden;
     padding: 0 !important;
-    border: 1px solid rgba(212, 87, 109, 0.15);
+    border: 1px solid rgba(153, 0, 0, 0.15);
     background: linear-gradient(145deg, var(--bg-panel), var(--bg-card)) !important;
     border-radius: 16px;
 }
@@ -409,7 +426,7 @@ body {
     height: 200px;
     overflow: hidden;
     position: relative;
-    background: linear-gradient(135deg, #1a1d26, #0b0c10);
+    background: linear-gradient(135deg, #202020, #0a0a0a);
 }
 
 .hero-avatar {
@@ -479,7 +496,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 1px solid rgba(212, 87, 109, 0.3);
+    border: 1px solid rgba(153, 0, 0, 0.3);
     color: var(--primary);
     cursor: pointer;
     transition: all 0.3s ease;
@@ -498,9 +515,9 @@ body {
     position: relative;
     padding: 18px !important;
     min-height: 140px;
-    background: linear-gradient(145deg, rgba(31, 40, 51, 0.85), rgba(26, 29, 38, 0.7)) !important;
+    background: linear-gradient(145deg, rgba(30, 30, 30, 0.85), rgba(25, 25, 25, 0.7)) !important;
     backdrop-filter: blur(15px);
-    border: 1px solid rgba(212, 87, 109, 0.15);
+    border: 1px solid rgba(153, 0, 0, 0.15);
     border-radius: 14px;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -518,7 +535,7 @@ body {
     width: 36px;
     height: 36px;
     border-radius: 0 14px 0 14px;
-    background: rgba(212, 87, 109, 0.05) !important;
+    background: rgba(153, 0, 0, 0.05) !important;
     color: var(--text-muted);
     opacity: 0.3;
     transition: all 0.2s;
@@ -526,7 +543,7 @@ body {
 
 .equip-card:hover .settings-btn {
     opacity: 1;
-    background: rgba(212, 87, 109, 0.1) !important;
+    background: rgba(153, 0, 0, 0.1) !important;
 }
 
 .equip-name-compact {
@@ -558,11 +575,11 @@ body {
 
 /* ========== FILTERS ========== */
 .advanced-filter-area {
-    background: linear-gradient(145deg, rgba(31, 40, 51, 0.9), rgba(26, 29, 38, 0.8));
+    background: linear-gradient(145deg, rgba(30, 30, 30, 0.9), rgba(25, 25, 25, 0.8));
     padding: 28px;
     border-radius: 18px;
     margin-bottom: 32px;
-    border: 1px solid rgba(212, 87, 109, 0.15);
+    border: 1px solid rgba(153, 0, 0, 0.15);
     box-shadow: var(--shadow-lg);
     display: flex !important;
     flex-direction: column;
@@ -592,8 +609,8 @@ body {
 }
 
 .chip {
-    background: rgba(212, 87, 109, 0.05);
-    border: 1px solid rgba(212, 87, 109, 0.15);
+    background: rgba(153, 0, 0, 0.05);
+    border: 1px solid rgba(153, 0, 0, 0.15);
     color: var(--text-muted);
     padding: 10px 20px;
     border-radius: 10px;
@@ -605,7 +622,7 @@ body {
 
 .chip:hover {
     border-color: var(--primary);
-    background: rgba(212, 87, 109, 0.1);
+    background: rgba(153, 0, 0, 0.1);
     color: var(--text-main);
     transform: translateY(-2px);
 }
@@ -631,7 +648,7 @@ body {
     justify-content: space-between;
     padding: 10px 15px;
     background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(212, 87, 109, 0.1);
+    border: 1px solid rgba(153, 0, 0, 0.1);
     border-radius: 10px;
 }
 
@@ -710,7 +727,7 @@ body {
     background: linear-gradient(145deg, var(--bg-panel), var(--bg-card));
     margin: 8% auto;
     padding: 35px;
-    border: 1px solid rgba(212, 87, 109, 0.2);
+    border: 1px solid rgba(153, 0, 0, 0.2);
     width: 440px;
     max-width: 90%;
     border-radius: 18px;
@@ -749,7 +766,7 @@ body {
     width: 100%;
     padding: 12px;
     border-radius: 8px;
-    border: 1px solid rgba(212, 87, 109, 0.2);
+    border: 1px solid rgba(153, 0, 0, 0.2);
     background-color: rgba(11, 12, 16, 0.8);
     color: var(--text-main);
     font-size: 0.95rem;
@@ -760,7 +777,7 @@ body {
 .form-group select:focus {
     outline: none;
     border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(212, 87, 109, 0.1);
+    box-shadow: 0 0 0 3px rgba(153, 0, 0, 0.1);
 }
 
 /* ========== UTILITIES ========== */
@@ -772,7 +789,7 @@ body {
 }
 
 .priority-tag {
-    background: rgba(31, 40, 51, 0.8);
+    background: rgba(30, 30, 30, 0.8);
     border: 1px solid var(--primary);
     padding: 6px 14px;
     border-radius: 20px;
@@ -797,8 +814,8 @@ body {
 .mini-tag {
     font-size: 0.75em;
     padding: 3px 10px;
-    background: rgba(212, 87, 109, 0.08);
-    border: 1px solid rgba(212, 87, 109, 0.15);
+    background: rgba(153, 0, 0, 0.08);
+    border: 1px solid rgba(153, 0, 0, 0.15);
     border-radius: 6px;
     color: var(--text-muted);
 }
