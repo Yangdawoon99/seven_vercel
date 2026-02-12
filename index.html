@@ -7,6 +7,23 @@
     <title>Sena-Re Gear Manager</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script>
+        // 1. Simple Access Authentication (Inlined to avoid cache)
+        const AUTH_CODE = 'senafinal0522';
+        if (sessionStorage.getItem('sena_auth') !== 'true') {
+            const userInput = window.prompt("SENA-RE GEAR 접속 인증\n인증 코드를 입력하세요:");
+            if (userInput === AUTH_CODE) {
+                sessionStorage.setItem('sena_auth', 'true');
+            } else {
+                alert("인증에 실패했습니다. 올바른 사용자만 접근 가능합니다.");
+                window.location.href = "about:blank"; // Move to empty page
+            }
+        }
+        window.resetSena = () => {
+            sessionStorage.removeItem('sena_auth');
+            location.reload();
+        };
+    </script>
 </head>
 
 <body>
