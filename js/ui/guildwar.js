@@ -236,6 +236,7 @@ function openStrategyEditor(id) {
             document.getElementById('gw-note').value = s.note || '';
             document.getElementById('gw-enemy-alt').value = s.enemy_alt || '';
             document.getElementById('gw-speed').value = s.speed || 0;
+            document.getElementById('gw-title').value = s.title || '';
         }
     } else {
         document.getElementById('gw-skill-order').value = '';
@@ -244,6 +245,7 @@ function openStrategyEditor(id) {
         document.getElementById('gw-note').value = '';
         document.getElementById('gw-enemy-alt').value = '';
         document.getElementById('gw-speed').value = 0;
+        document.getElementById('gw-title').value = '';
     }
 
     renderEditorSlots();
@@ -345,6 +347,7 @@ async function saveStrategy() {
         pet: document.getElementById('gw-pet').value.trim() || null,
         note: document.getElementById('gw-note').value.trim() || null,
         speed: parseInt(document.getElementById('gw-speed').value) || 0,
+        title: document.getElementById('gw-title').value.trim() || null,
         author_name: authorName,
         updated_at: new Date().toISOString()
     };
