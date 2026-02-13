@@ -1405,11 +1405,56 @@ body {
     color: #ff6b6b;
 }
 
-/* Empty State */
-.gw-empty {
-    text-align: center;
-    padding: 60px 20px;
+.gw-category-tag {
+    background: rgba(153, 0, 0, 0.2);
+    color: #ff6b6b;
+    border: 1px solid rgba(153, 0, 0, 0.3);
+    border-radius: 4px;
+    padding: 2px 8px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    margin-right: 8px;
+}
+
+.gw-editor-field select {
+    padding: 10px 12px;
+    background: var(--bg-dark);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    color: var(--text-main);
+    font-size: 0.88rem;
+    outline: none;
+    cursor: pointer;
+}
+
+.gw-enemy-header {
+    background: linear-gradient(135deg, rgba(153, 0, 0, 0.25), rgba(20, 20, 20, 0.95));
+    border: 1px solid rgba(153, 0, 0, 0.4);
+    border-radius: 12px;
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.gw-enemy-header:hover {
+    background: linear-gradient(135deg, rgba(153, 0, 0, 0.35), rgba(30, 30, 30, 0.95));
+}
+
+.gw-group-toggle {
+    margin-left: auto;
     color: var(--text-muted);
+    transition: transform 0.3s ease;
+}
+
+.gw-group.collapsed .gw-strategy-card {
+    display: none;
+}
+
+.gw-group.collapsed .gw-group-toggle {
+    transform: rotate(-90deg);
 }
 
 .gw-empty i {
