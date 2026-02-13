@@ -103,18 +103,11 @@ function renderStrategies() {
         groupEl.dataset.key = gIdx;
 
         // Enemy Preview (Grid Card Content)
-        const eBack = group.enemy.slice(0, 3);
-        const eFront = group.enemy.slice(3, 6);
-
-        const groupHeader = document.createElement('div');
-        groupHeader.className = 'gw-enemy-card-header';
-
-        const groupHeader = document.createElement('div');
-        groupHeader.className = 'gw-enemy-card-header';
-
         // Compact Hero Preview
         const eBack = group.enemy.slice(0, 3);
         const eFront = group.enemy.slice(3, 6);
+        const groupHeader = document.createElement('div');
+        groupHeader.className = 'gw-enemy-card-header';
 
         groupHeader.innerHTML = `
             <div class="gw-speed-badge"><i class="fas fa-bolt"></i> ${group.speed}</div>
