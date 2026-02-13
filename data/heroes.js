@@ -619,7 +619,7 @@ export const heroes = [
     {
         id: "sokyo",
         name: "소교",
-        icon: "assets/images/sokyo_hd.png",
+        icon: "https://raw.githubusercontent.com/Yangdawoon99/seven_vercel/main/assets/images/sokyo_hd.png",
         level: 30,
         type: "magic",
         stats: { attack: 2200, defense: 620, hp: 4300, speed: 28, crit_rate: 0.1, crit_damage: 1.5, weakness_rate: 0.1, block_rate: 0, effect_hit: 0.15, effect_resist: 0.1 }
