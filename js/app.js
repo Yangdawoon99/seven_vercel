@@ -362,7 +362,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             pageTitle.innerText = sectionTitles[tabName] || '매니저';
 
             // Show/Hide Sections
-            sections.forEach(sec => sec.style.display = 'none');
+            document.querySelectorAll('.section').forEach(sec => sec.style.display = 'none');
 
             const targetSection = document.getElementById(`${tabName}-section`);
             if (targetSection) {
