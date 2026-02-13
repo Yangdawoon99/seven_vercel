@@ -298,9 +298,25 @@ async function handleLoginAction() {
     }
 }
 
-function loginSuccess(member) {
+async function refreshAppData() {
+    console.log("Refreshing app data for user:", AuthState.currentUser?.nickname);
+    try {
+        await Promise.all([
+            refreshHeroesUI(),
+            refreshEquipmentUI(),
+            refreshContentsUI(),
+            refreshPresetsUI()
+        ]);
+        console.log("App data refreshed successfully");
+    } catch (e) {
+        console.error("Error refreshing app data:", e);
+    }
+}
+
+async function loginSuccess(member) {
     localStorage.setItem('guild_user', JSON.stringify(member));
     AuthState.currentUser = member;
+    await refreshAppData();
     unlockApp();
 }
 
@@ -313,10 +329,10 @@ function unlockApp() {
 }
 
 // Sub-modules initialization
-import { initHeroesUI } from './ui/heroes.js';
-import { initEquipmentUI } from './ui/equipment.js';
-import { initContentsUI } from './ui/contents.js';
-import { initPresetsUI } from './ui/presets.js';
+import { initHeroesUI, refreshHeroesUI } from './ui/heroes.js';
+import { initEquipmentUI, refreshEquipmentUI } from './ui/equipment.js';
+import { initContentsUI, refreshContentsUI } from './ui/contents.js';
+import { initPresetsUI, refreshPresetsUI } from './ui/presets.js';
 import { initHelpUI } from './ui/help.js';
 
 // App Entry Point

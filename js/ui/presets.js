@@ -7,6 +7,10 @@ import { getCurrentUserId } from '/js/services/auth.js';
 export let presets = [];
 
 export async function initPresetsUI() {
+    await refreshPresetsUI();
+}
+
+export async function refreshPresetsUI() {
     await loadPresets();
     renderPresetList();
 }

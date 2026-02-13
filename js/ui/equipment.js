@@ -41,11 +41,15 @@ let currentFilters = {
 };
 
 export async function initEquipmentUI() {
-    await loadEquipment();
     initFilterUI();
     populateSelects();
-    renderEquipList();
     setupEventListeners();
+    await refreshEquipmentUI();
+}
+
+export async function refreshEquipmentUI() {
+    await loadEquipment();
+    renderEquipList();
 }
 
 async function loadEquipment() {

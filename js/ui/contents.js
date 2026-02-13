@@ -9,6 +9,11 @@ import { getCurrentUserId } from '/js/services/auth.js';
 let heroes = [];
 
 export async function initContentsUI() {
+    setupContentsEventListeners();
+    await refreshContentsUI();
+}
+
+export async function refreshContentsUI() {
     try {
         const userId = getCurrentUserId();
         if (userId) {
@@ -18,15 +23,59 @@ export async function initContentsUI() {
                 .eq('user_id', userId)
                 .order('created_at', { ascending: false });
 
-            if (!error) heroes = data;
+            if (!error) {
+                heroes = data;
+                populateHeroes();
+                renderPriorityTags();
+            }
+        } else {
+            heroes = [];
+            populateHeroes();
+            renderPriorityTags();
         }
     } catch (e) {
         console.error("ContentsUI: Failed to fetch heroes", e);
     }
+}
 
+// Global priorities for this module
+let selectedPriorities = [];
+
+// Populate Hero Select
+function populateHeroes() {
+    const heroSelect = document.getElementById('opt-hero-select');
+    if (!heroSelect) return;
+    heroSelect.innerHTML = '<option value="">영웅을 선택하세요</option>';
+    heroes.forEach(h => {
+        const option = document.createElement('option');
+        option.value = h.id;
+        option.innerText = h.name;
+        heroSelect.appendChild(option);
+    });
+}
+
+function renderPriorityTags() {
+    const priorityContainer = document.getElementById('priority-list-container');
+    if (!priorityContainer) return;
+    priorityContainer.innerHTML = '';
+    selectedPriorities.forEach((p, index) => {
+        const tag = document.createElement('div');
+        tag.className = 'priority-tag';
+
+        const label = STAT_LABELS[p.stat] || p.stat;
+        const typeStr = p.type === 'max' ? '최대화' : `${p.value} 이상`;
+
+        tag.innerHTML = `
+            <span><strong>${label}</strong>: ${typeStr}</span>
+            <i class="fas fa-times-circle" onclick="window.removePriorityCondition(${index})"></i>
+        `;
+        priorityContainer.appendChild(tag);
+    });
+}
+
+function setupContentsEventListeners() {
     const heroSelect = document.getElementById('opt-hero-select');
     const optimizeBtn = document.getElementById('optimize-btn');
-    const priorityContainer = document.getElementById('priority-list-container');
     const addPriorityBtn = document.getElementById('add-priority-btn');
 
     const pModal = document.getElementById('priority-modal');
@@ -34,22 +83,6 @@ export async function initContentsUI() {
     const pConfirm = document.getElementById('p-confirm-btn');
     const pTypeSelect = document.getElementById('p-type-select');
     const pValGroup = document.getElementById('p-val-group');
-
-    let selectedPriorities = [];
-
-    // Populate Hero Select
-    function populateHeroes() {
-        if (!heroSelect) return;
-        heroSelect.innerHTML = '<option value="">영웅을 선택하세요</option>';
-        heroes.forEach(h => {
-            const option = document.createElement('option');
-            option.value = h.id;
-            option.innerText = h.name;
-            heroSelect.appendChild(option);
-        });
-    }
-
-    populateHeroes();
 
     // Modal Handling
     if (addPriorityBtn) {
@@ -91,24 +124,6 @@ export async function initContentsUI() {
         });
     }
 
-    function renderPriorityTags() {
-        if (!priorityContainer) return;
-        priorityContainer.innerHTML = '';
-        selectedPriorities.forEach((p, index) => {
-            const tag = document.createElement('div');
-            tag.className = 'priority-tag';
-
-            const label = STAT_LABELS[p.stat] || p.stat;
-            const typeStr = p.type === 'max' ? '최대화' : `${p.value} 이상`;
-
-            tag.innerHTML = `
-                <span><strong>${label}</strong>: ${typeStr}</span>
-                <i class="fas fa-times-circle" onclick="window.removePriorityCondition(${index})"></i>
-            `;
-            priorityContainer.appendChild(tag);
-        });
-    }
-
     window.removePriorityCondition = (index) => {
         selectedPriorities.splice(index, 1);
         renderPriorityTags();
@@ -116,7 +131,7 @@ export async function initContentsUI() {
 
     if (optimizeBtn) {
         optimizeBtn.addEventListener('click', () => {
-            const heroId = heroSelect.value;
+            const heroId = heroSelect ? heroSelect.value : null;
             if (!heroId) {
                 alert('영웅을 먼저 선택해주세요!');
                 return;

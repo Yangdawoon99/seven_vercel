@@ -7,9 +7,13 @@ import { getCurrentUserId } from '/js/services/auth.js';
 let heroes = []; // Local cache for efficiency
 
 export async function initHeroesUI() {
+    setupEventListeners();
+    await refreshHeroesUI();
+}
+
+export async function refreshHeroesUI() {
     await loadHeroes();
     renderHeroList();
-    setupEventListeners();
 }
 
 async function loadHeroes() {
