@@ -1005,19 +1005,16 @@ body {
     bottom: 0;
     left: 0;
     width: 100%;
-    background: rgba(0, 0, 0, 0.4);
-    /* Higher transparency */
+    background: rgba(0, 0, 0, 0.6);
     color: #ffd700;
     font-size: 0.65rem;
-    /* Slightly smaller for better visibility */
     font-weight: 700;
-    padding: 3px 0;
+    padding: 3px 2px;
     margin: 0;
     text-align: center;
-    /* Center alignment */
     white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    /* Keep single line as requested */
+    /* Remove text-overflow and overflow:hidden to show full name if possible */
     border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
@@ -1318,8 +1315,7 @@ body {
     text-align: center;
     padding: 2px 0;
     white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    /* Removed overflow:hidden and text-overflow:ellipsis */
 }
 
 .gw-hero-fallback {
@@ -1406,14 +1402,17 @@ body {
 }
 
 .gw-add-counter-btn {
-    background: rgba(212, 87, 109, 0.1);
+    background: rgba(212, 87, 109, 0.15);
     border: 1px solid rgba(212, 87, 109, 0.3);
-    color: #d4576d;
-    padding: 4px 8px;
-    border-radius: 4px;
-    font-size: 0.7rem;
+    color: #ff8597;
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 0.78rem;
+    font-weight: 700;
     cursor: pointer;
     transition: all 0.2s;
+    white-space: nowrap;
+    /* Prevent squashing */
     margin-top: 4px;
 }
 
@@ -1436,12 +1435,15 @@ body {
 }
 
 .gw-count-badge {
-    background: rgba(0, 0, 0, 0.5);
-    color: var(--text-muted);
-    font-size: 0.72rem;
-    padding: 3px 8px;
-    border-radius: 4px;
+    background: rgba(0, 0, 0, 0.3);
+    color: var(--text-sub);
+    font-size: 0.75rem;
+    padding: 3px 10px;
+    border-radius: 6px;
     font-weight: 500;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    white-space: nowrap;
+    /* Prevent squashing */
 }
 
 #gw-strategy-list {
@@ -1489,12 +1491,14 @@ body {
 }
 
 .gw-header-left {
-    flex: 1;
-    min-width: 0;
+    flex: 1.5;
+    /* Give title more room */
+    min-width: 120px;
 }
 
 .gw-header-center {
     flex-shrink: 0;
+    margin: 0 10px;
 }
 
 .gw-header-right {
@@ -1502,18 +1506,20 @@ body {
     display: flex;
     flex-direction: column;
     align-items: flex-end;
-    gap: 4px;
-    min-width: 0;
+    gap: 6px;
+    flex-shrink: 0;
+    min-width: 90px;
 }
 
 .gw-group-title {
-    font-size: 0.95rem;
+    font-size: 1rem;
     font-weight: 800;
     color: #ffd700;
-    overflow: hidden;
-    text-overflow: ellipsis;
     white-space: nowrap;
+    /* No wrap */
+    /* Remove text-overflow and overflow:hidden to prevent '...' */
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    word-break: keep-all;
 }
 
 .gw-enemy-deck-preview {
@@ -1542,8 +1548,7 @@ body {
     flex-direction: column;
     align-items: flex-end;
     gap: 6px;
-    flex: 1;
-    min-width: 0;
+    flex-shrink: 0;
 }
 
 .gw-counter-label {
