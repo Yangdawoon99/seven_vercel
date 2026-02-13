@@ -1005,12 +1005,16 @@ body {
     bottom: 0;
     left: 0;
     width: 100%;
-    background: rgba(0, 0, 0, 0.85);
+    background: rgba(0, 0, 0, 0.4);
+    /* Higher transparency */
     color: #ffd700;
-    font-size: 0.7rem;
+    font-size: 0.65rem;
+    /* Slightly smaller for better visibility */
     font-weight: 700;
-    padding: 4px 0;
+    padding: 3px 0;
     margin: 0;
+    text-align: center;
+    /* Center alignment */
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -1042,7 +1046,8 @@ body {
 .favorite-btn {
     position: absolute;
     top: 8px;
-    right: 8px;
+    left: 8px;
+    /* Moved to Top Left */
     background: rgba(0, 0, 0, 0.6);
     backdrop-filter: blur(4px);
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -1050,11 +1055,35 @@ body {
     width: 30px;
     height: 30px;
     border-radius: 50%;
-    z-index: 5;
+    z-index: 10;
+    /* Increased z-index */
     transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.settings-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    /* Settings on Top Right */
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: white;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.settings-btn:hover {
+    background: var(--primary);
+    transform: rotate(45deg);
 }
 
 .favorite-btn:hover {
