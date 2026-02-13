@@ -48,12 +48,30 @@ function setupEventListeners() {
     const closeBtn = modal.querySelector('.close-modal');
     const form = document.getElementById('hero-form');
 
+    // Auto Match Logic
+    const nameInput = document.getElementById('hero-name');
+    const previewIcon = document.getElementById('hero-preview-icon');
+    const typeSelect = document.getElementById('hero-type');
+
+    nameInput.addEventListener('input', () => {
+        const name = nameInput.value.trim();
+        const matched = staticHeroes.find(h => h.name === name);
+        if (matched) {
+            previewIcon.src = matched.icon;
+            previewIcon.style.display = 'block';
+            if (typeSelect) typeSelect.value = matched.type;
+        } else {
+            previewIcon.style.display = 'none';
+        }
+    });
+
     // ... (modal open/close listeners)
     addHeroBtn.addEventListener('click', () => {
         form.reset();
         document.getElementById('hero-id').value = '';
         document.getElementById('hero-modal-title').innerText = '영웅 등록';
         document.getElementById('btn-delete-hero').style.display = 'none';
+        previewIcon.style.display = 'none';
         modal.style.display = 'block';
     });
 
@@ -87,6 +105,10 @@ function setupEventListeners() {
         const name = document.getElementById('hero-name').value;
         const type = document.getElementById('hero-type').value;
 
+        // Auto Match Icon
+        const matched = staticHeroes.find(h => h.name === name);
+        const icon = matched ? matched.icon : null;
+
         // Capture Stats
         const stats = {
             attack: parseInt(document.getElementById('hero-atk').value) || 0,
@@ -102,15 +124,12 @@ function setupEventListeners() {
         };
 
         let hero;
-        let isUpdate = false;
 
         if (idInput) {
             hero = heroes.find(h => h.id === idInput);
             if (hero) {
-                Object.assign(hero, { name, type, stats, level: 30 });
-                // Ensure user_id is preserved or added if missing
+                Object.assign(hero, { name, type, stats, level: 30, icon });
                 if (!hero.user_id) hero.user_id = getCurrentUserId();
-                isUpdate = true;
             }
         } else {
             const userId = getCurrentUserId();
@@ -126,6 +145,7 @@ function setupEventListeners() {
                 type,
                 level: 30,
                 stats,
+                icon,
                 priority: []
             };
             heroes.push(hero);
@@ -133,7 +153,7 @@ function setupEventListeners() {
 
         const { error } = await supabase
             .from('heroes')
-            .upsert(hero); // Upsert handles both insert and update based on PK
+            .upsert(hero);
 
         if (error) {
             console.error('Failed to save hero:', error);
