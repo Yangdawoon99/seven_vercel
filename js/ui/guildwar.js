@@ -66,12 +66,14 @@ function renderStrategies() {
     strategies.forEach(s => {
         // Filter empty strings out for the key
         const heroes = (s.enemy_heroes || []).filter(h => h && h !== 'undefined');
-        const key = heroes.sort().join('+') + (s.enemy_alt ? `/${s.enemy_alt}` : '');
+        const key = heroes.sort().join('+') + (s.enemy_alt ? `/${s.enemy_alt}` : '') + `|${s.speed || 0}`;
+
         if (!groups[key]) groups[key] = {
             enemy: s.enemy_heroes,
             alt: s.enemy_alt,
+            speed: s.speed || 0,
             counters: [],
-            isCollapsed: false
+            isExpanded: false
         };
         groups[key].counters.push(s);
     });
@@ -89,47 +91,66 @@ function renderStrategies() {
     }
 
     filteredGroups.forEach((group, gIdx) => {
+        // Sort counters by latest first
+        group.counters.sort((a, b) => {
+            const dateA = new Date(a.updated_at || a.created_at);
+            const dateB = new Date(b.updated_at || b.created_at);
+            return dateB - dateA;
+        });
+
         const groupEl = document.createElement('div');
         groupEl.className = 'gw-group';
-        if (group.isCollapsed) groupEl.classList.add('collapsed');
+        groupEl.dataset.key = gIdx;
 
-        // Enemy header (Accordion Toggle)
-        const enemyHeader = document.createElement('div');
-        enemyHeader.className = 'gw-enemy-header';
-
+        // Enemy Preview (Grid Card Content)
         const eBack = group.enemy.slice(0, 3);
         const eFront = group.enemy.slice(3, 6);
 
-        enemyHeader.innerHTML = `
-            <div class="gw-enemy-label">🎯 상대 방어팀 (${group.counters.length})</div>
-            <div class="gw-deck-icons">
-                <div class="gw-deck-row">
-                    ${eBack.map(name => renderHeroSlot(name)).join('')}
+        const groupHeader = document.createElement('div');
+        groupHeader.className = 'gw-enemy-card-header';
+
+        let headerHtml = `
+            <div class="gw-speed-badge"><i class="fas fa-bolt"></i> ${group.speed}</div>
+            <div class="gw-enemy-deck-preview">
+                <div class="gw-enemy-deck-column">
+                    <span class="gw-deck-label">후열</span>
+                    <div class="gw-deck-row">${eBack.map(name => renderHeroSlot(name)).join('')}</div>
                 </div>
-                <div class="gw-deck-row">
-                    ${eFront.map(name => renderHeroSlot(name)).join('')}
+                <div class="gw-enemy-deck-column">
+                    <span class="gw-deck-label">전열</span>
+                    <div class="gw-deck-row">${eFront.map(name => renderHeroSlot(name)).join('')}</div>
                 </div>
             </div>
-            ${group.alt ? `<span class="gw-alt-label">or ${renderHeroSlot(group.alt)}</span>` : ''}
-            <div class="gw-group-toggle"><i class="fas fa-chevron-down"></i></div>
+            ${group.alt ? `<div class="gw-alt-info">OR ${renderHeroSlot(group.alt)}</div>` : ''}
+            <div class="gw-count-badge">공략 ${group.counters.length}개</div>
         `;
+        groupHeader.innerHTML = headerHtml;
+        groupEl.appendChild(groupHeader);
 
-        enemyHeader.onclick = () => {
-            groupEl.classList.toggle('collapsed');
+        // Click to expand
+        groupHeader.onclick = () => {
+            // Close others? Optional. For now let's toggle.
+            // If we want Grid-friendly logic: one expanded at a time often works best for layout
+            const wasExpanded = groupEl.classList.contains('expanded');
+            document.querySelectorAll('.gw-group.expanded').forEach(el => el.classList.remove('expanded'));
+
+            if (!wasExpanded) {
+                groupEl.classList.add('expanded');
+                // Scroll into view?
+                setTimeout(() => groupEl.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+            }
         };
 
-        groupEl.appendChild(enemyHeader);
+        // Counters List Container
+        const countersList = document.createElement('div');
+        countersList.className = 'gw-counters-list';
 
-        // Counter strategies
         group.counters.forEach((counter) => {
             const card = document.createElement('div');
-            card.className = 'gw-strategy-card';
+            card.className = 'gw-counter-item';
 
             const cBack = counter.counter_heroes.slice(0, 3);
             const cFront = counter.counter_heroes.slice(3, 6);
-
-            const ceBack = counter.enemy_heroes.slice(0, 3);
-            const ceFront = counter.enemy_heroes.slice(3, 6);
 
             const equipHtml = (counter.equipment || []).map(eq =>
                 `<span class="gw-equip-tag"><b>${eq.hero}</b> ${eq.set} ${eq.stats}</span>`
@@ -139,16 +160,6 @@ function renderStrategies() {
 
             card.innerHTML = `
                 <div class="gw-vs-layout">
-                    <div class="gw-side gw-side-enemy">
-                        <div class="gw-side-label">상대 구성</div>
-                        <div class="gw-deck-icons">
-                            <div class="gw-deck-row">${ceBack.map(name => renderHeroSlot(name)).join('')}</div>
-                            <div class="gw-deck-row">${ceFront.map(name => renderHeroSlot(name)).join('')}</div>
-                        </div>
-                    </div>
-                    <div class="gw-vs-divider">
-                        <span>VS</span>
-                    </div>
                     <div class="gw-side gw-side-counter">
                         <div class="gw-side-label">상성 공략덱</div>
                         <div class="gw-deck-icons">
@@ -156,18 +167,17 @@ function renderStrategies() {
                             <div class="gw-deck-row">${cFront.map(name => renderHeroSlot(name)).join('')}</div>
                         </div>
                     </div>
-                </div>
-                <div class="gw-meta">
-                    <div class="gw-meta-row">
-                        ${counter.category ? `<span class="gw-category-tag">${counter.category}</span>` : ''}
-                        ${counter.skill_order ? `<span><i class="fas fa-list-ol"></i> ${counter.skill_order}</span>` : ''}
-                    </div>
-                    ${equipHtml ? `<div class="gw-meta-row"><i class="fas fa-shield-alt"></i>${equipHtml}</div>` : ''}
-                    ${counter.pet ? `<div class="gw-meta-row"><i class="fas fa-paw"></i><span>펫: ${counter.pet}</span></div>` : ''}
-                    ${counter.note ? `<div class="gw-meta-row gw-note"><i class="fas fa-info-circle"></i><span>${counter.note}</span></div>` : ''}
-                    <div class="gw-meta-row author-info">
-                        <i class="fas fa-user-edit"></i>
-                        <span>${counter.author_name || '익명'} (${dateStr})</span>
+                     <div class="gw-meta">
+                        <div class="gw-meta-row">
+                            ${counter.skill_order ? `<span><i class="fas fa-list-ol"></i> ${counter.skill_order}</span>` : ''}
+                        </div>
+                        ${equipHtml ? `<div class="gw-meta-row"><i class="fas fa-shield-alt"></i>${equipHtml}</div>` : ''}
+                        ${counter.pet ? `<div class="gw-meta-row"><i class="fas fa-paw"></i><span>펫: ${counter.pet}</span></div>` : ''}
+                        ${counter.note ? `<div class="gw-meta-row gw-note"><i class="fas fa-info-circle"></i><span>${counter.note}</span></div>` : ''}
+                        <div class="gw-meta-row author-info">
+                            <i class="fas fa-user-edit"></i>
+                            <span>${counter.author_name || '익명'} (${dateStr})</span>
+                        </div>
                     </div>
                 </div>
                 <div class="gw-card-actions">
@@ -175,9 +185,10 @@ function renderStrategies() {
                     <button class="gw-delete-btn" onclick="window.gwDeleteStrategy('${counter.id}')"><i class="fas fa-trash"></i> 삭제</button>
                 </div>
             `;
-            groupEl.appendChild(card);
+            countersList.appendChild(card);
         });
 
+        groupEl.appendChild(countersList);
         list.appendChild(groupEl);
     });
 }
@@ -221,7 +232,7 @@ function openStrategyEditor(id) {
             document.getElementById('gw-pet').value = s.pet || '';
             document.getElementById('gw-note').value = s.note || '';
             document.getElementById('gw-enemy-alt').value = s.enemy_alt || '';
-            document.getElementById('gw-category').value = s.category || '밸런스';
+            document.getElementById('gw-speed').value = s.speed || 0;
         }
     } else {
         document.getElementById('gw-skill-order').value = '';
@@ -229,7 +240,7 @@ function openStrategyEditor(id) {
         document.getElementById('gw-pet').value = '';
         document.getElementById('gw-note').value = '';
         document.getElementById('gw-enemy-alt').value = '';
-        document.getElementById('gw-category').value = '밸런스';
+        document.getElementById('gw-speed').value = 0;
     }
 
     renderEditorSlots();
@@ -330,7 +341,7 @@ async function saveStrategy() {
         equipment: equipment,
         pet: document.getElementById('gw-pet').value.trim() || null,
         note: document.getElementById('gw-note').value.trim() || null,
-        category: document.getElementById('gw-category').value,
+        speed: parseInt(document.getElementById('gw-speed').value) || 0,
         author_name: authorName,
         updated_at: new Date().toISOString()
     };
