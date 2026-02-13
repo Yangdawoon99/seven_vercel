@@ -6,6 +6,7 @@ import { savePreset } from './presets.js';
 import { userEquipment } from './equipment.js';
 import { getCurrentUserId } from '/js/services/auth.js';
 
+const supabase = window.supabase;
 let heroes = [];
 
 export async function initContentsUI() {

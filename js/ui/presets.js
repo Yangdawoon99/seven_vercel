@@ -4,6 +4,7 @@ import { ApiService } from '/js/services/api.js';
 import { userEquipment } from './equipment.js'; // Added for index lookup
 import { getCurrentUserId } from '/js/services/auth.js';
 
+const supabase = window.supabase;
 export let presets = [];
 
 export async function initPresetsUI() {

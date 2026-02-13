@@ -3,6 +3,7 @@ import { ApiService } from '/js/services/api.js';
 import { STAT_LABELS, SET_LABELS } from '/js/utils/constants.js';
 import { getCurrentUserId } from '/js/services/auth.js';
 
+const supabase = window.supabase;
 // Change to let to allow reassignment
 export let userEquipment = []; // Local cache
 

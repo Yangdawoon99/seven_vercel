@@ -1,5 +1,6 @@
 import { heroes as staticHeroes } from '../../data/heroes.js';
 
+const supabase = window.supabase;
 let strategies = [];
 let currentGwTab = 'attack'; // 'attack' or 'defense'
 
