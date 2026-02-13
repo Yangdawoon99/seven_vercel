@@ -118,6 +118,9 @@ function renderStrategies() {
             <div class="gw-enemy-info">
                 <div class="gw-count-badge">공략 ${group.counters.length}개</div>
                 ${group.alt ? `<span class="gw-alt-text">or ${group.alt}</span>` : ''}
+                <button class="gw-add-counter-btn" onclick="event.stopPropagation(); window.gwOpenAddCounter('${gIdx}')">
+                    <i class="fas fa-plus"></i> 공략 추가
+                </button>
             </div>
         `;
         groupEl.appendChild(gwGroupHeader);
@@ -215,36 +218,56 @@ let editingId = null;
 let editorSlots = { enemy: Array(6).fill(null), counter: Array(6).fill(null) };
 let currentPickerTarget = null; // { side: 'enemy'|'counter', index: 0-5 }
 
-function openStrategyEditor(id) {
+function openStrategyEditor(id, prefillData = null) {
     editingId = id || null;
     editorSlots = { enemy: Array(6).fill(null), counter: Array(6).fill(null) };
+
+    const setVal = (id, val) => {
+        const el = document.getElementById(id);
+        if (el) el.value = val;
+    };
 
     if (id) {
         const s = strategies.find(s => s.id === id);
         if (s) {
             editorSlots.enemy = [...(s.enemy_heroes || []), ...Array(6).fill(null)].slice(0, 6);
             editorSlots.counter = [...(s.counter_heroes || []), ...Array(6).fill(null)].slice(0, 6);
-            document.getElementById('gw-skill-order').value = s.skill_order || '';
-            document.getElementById('gw-equipment').value = (s.equipment || []).map(e => `${e.hero} ${e.set} ${e.stats}`).join('\n');
-            document.getElementById('gw-pet').value = s.pet || '';
-            document.getElementById('gw-note').value = s.note || '';
-            document.getElementById('gw-enemy-alt').value = s.enemy_alt || '';
-            document.getElementById('gw-speed').value = s.speed || 0;
-            document.getElementById('gw-title').value = s.title || '';
+            setVal('gw-skill-order', s.skill_order || '');
+            setVal('gw-equipment', (s.equipment || []).map(e => `${e.hero} ${e.set} ${e.stats}`).join('\n'));
+            setVal('gw-pet', s.pet || '');
+            setVal('gw-note', s.note || '');
+            setVal('gw-enemy-alt', s.enemy_alt || '');
+            setVal('gw-speed', s.speed || 0);
+            setVal('gw-title', s.title || '');
         }
+    } else if (prefillData) {
+        // Pre-fill mode (Add Counter to existing enemy deck)
+        editorSlots.enemy = [...(prefillData.enemy || []), ...Array(6).fill(null)].slice(0, 6);
+        setVal('gw-enemy-alt', prefillData.alt || '');
+        setVal('gw-speed', prefillData.speed || 0);
+
+        // Reset others
+        setVal('gw-skill-order', '');
+        setVal('gw-equipment', '');
+        setVal('gw-pet', '');
+        setVal('gw-note', '');
+        setVal('gw-title', '');
     } else {
-        document.getElementById('gw-skill-order').value = '';
-        document.getElementById('gw-equipment').value = '';
-        document.getElementById('gw-pet').value = '';
-        document.getElementById('gw-note').value = '';
-        document.getElementById('gw-enemy-alt').value = '';
-        document.getElementById('gw-speed').value = 0;
-        document.getElementById('gw-title').value = '';
+        setVal('gw-skill-order', '');
+        setVal('gw-equipment', '');
+        setVal('gw-pet', '');
+        setVal('gw-note', '');
+        setVal('gw-enemy-alt', '');
+        setVal('gw-speed', 0);
+        setVal('gw-title', '');
     }
 
     renderEditorSlots();
-    document.getElementById('gw-editor-modal').style.display = 'block';
-    document.getElementById('gw-editor-title').textContent = id ? '전략 수정' : '전략 추가';
+    const modal = document.getElementById('gw-editor-modal');
+    if (modal) modal.style.display = 'block';
+
+    const titleEl = document.getElementById('gw-editor-title');
+    if (titleEl) titleEl.textContent = id ? '전략 수정' : (prefillData ? '공략 추가' : '전략 추가');
 }
 
 function closeEditor() {
@@ -383,3 +406,16 @@ window.gwClearSlot = (side, index) => {
     renderEditorSlots();
 };
 window.gwOpenPicker = (side, index) => openHeroPicker(side, index);
+window.gwOpenAddCounter = (gIdx) => {
+    const groups = {};
+    strategies.forEach(s => {
+        const heroes = (s.enemy_heroes || []).filter(h => h && h !== 'undefined');
+        const key = heroes.sort().join('+') + (s.enemy_alt ? `/${s.enemy_alt}` : '') + `|${s.speed || 0}`;
+        if (!groups[key]) groups[key] = { enemy: s.enemy_heroes, alt: s.enemy_alt, speed: s.speed || 0 };
+    });
+    const groupArr = Object.values(groups);
+    const targetGroup = groupArr[gIdx];
+    if (targetGroup) {
+        openStrategyEditor(null, targetGroup);
+    }
+};
