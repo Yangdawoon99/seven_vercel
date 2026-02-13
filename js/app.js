@@ -334,6 +334,7 @@ import { initEquipmentUI, refreshEquipmentUI } from './ui/equipment.js';
 import { initContentsUI, refreshContentsUI } from './ui/contents.js';
 import { initPresetsUI, refreshPresetsUI } from './ui/presets.js';
 import { initHelpUI } from './ui/help.js';
+import { initGuildWarUI, refreshGuildWarUI } from './ui/guildwar.js';
 
 // App Entry Point
 document.addEventListener('DOMContentLoaded', async () => {
@@ -347,6 +348,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     await initContentsUI();
     await initPresetsUI();
     initHelpUI();
+    await initGuildWarUI();
 
     // Navigation Logic
     const navLinks = document.querySelectorAll('.nav-links li[data-tab]');
@@ -383,6 +385,10 @@ document.addEventListener('DOMContentLoaded', async () => {
             const targetSection = document.getElementById(`${tabName}-section`);
             if (targetSection) {
                 targetSection.style.display = 'block';
+                // Refresh guild war data when tab is clicked
+                if (tabName === 'guild-war') {
+                    refreshGuildWarUI();
+                }
             } else {
                 // Placeholder for missing sections
                 // Create a temporary placeholder if section doesn't exist

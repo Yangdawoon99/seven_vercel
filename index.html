@@ -8,7 +8,7 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <title>Sena-Re Gear Manager</title>
-    <link rel="stylesheet" href="css/style.css?v=1.0.3">
+    <link rel="stylesheet" href="css/style.css?v=1.1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 
@@ -165,6 +165,112 @@
                         <div class="widget card">
                             <h3>최근 공략</h3>
                             <p class="recent">없음</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Guild War -->
+                <div id="guild-war-section" class="section" style="display: none;">
+                    <div class="section-header">
+                        <h2>길드전</h2>
+                        <div class="header-actions">
+                            <div class="search-box">
+                                <i class="fas fa-search"></i>
+                                <input type="text" id="gw-search" placeholder="영웅 이름으로 검색...">
+                            </div>
+                            <button id="gw-add-btn" class="btn-primary"><i class="fas fa-plus"></i> 전략 추가</button>
+                        </div>
+                    </div>
+                    <div class="gw-sub-tabs">
+                        <button class="gw-sub-tab active" data-gw-tab="attack"><i class="fas fa-swords"></i> 공격
+                            진형</button>
+                        <button class="gw-sub-tab" data-gw-tab="defense"><i class="fas fa-shield-halved"></i> 방어
+                            진형</button>
+                    </div>
+                    <div id="gw-strategy-list" class="gw-strategy-list">
+                        <!-- Strategy cards rendered by JS -->
+                    </div>
+                </div>
+
+                <!-- Guild War Editor Modal -->
+                <div id="gw-editor-modal" class="modal-overlay" style="display:none;">
+                    <div class="modal-content gw-editor">
+                        <h3 id="gw-editor-title">전략 추가</h3>
+
+                        <div class="gw-editor-vs-layout">
+                            <div class="gw-editor-side">
+                                <div class="gw-editor-side-label">🎯 상대 방어팀</div>
+                                <div class="gw-editor-slots">
+                                    <div class="gw-hero-slot" id="gw-slot-enemy-0"
+                                        onclick="window.gwOpenPicker('enemy',0)"><i class="fas fa-plus"></i></div>
+                                    <div class="gw-hero-slot" id="gw-slot-enemy-1"
+                                        onclick="window.gwOpenPicker('enemy',1)"><i class="fas fa-plus"></i></div>
+                                    <div class="gw-hero-slot" id="gw-slot-enemy-2"
+                                        onclick="window.gwOpenPicker('enemy',2)"><i class="fas fa-plus"></i></div>
+                                </div>
+                                <div class="gw-editor-field">
+                                    <label>대체 영웅 (or)</label>
+                                    <input type="text" id="gw-enemy-alt" placeholder="예: 쁘">
+                                </div>
+                            </div>
+                            <div class="gw-editor-vs">⚔️ VS</div>
+                            <div class="gw-editor-side">
+                                <div class="gw-editor-side-label">🗡️ 상성 공격덱</div>
+                                <div class="gw-editor-slots">
+                                    <div class="gw-hero-slot" id="gw-slot-counter-0"
+                                        onclick="window.gwOpenPicker('counter',0)"><i class="fas fa-plus"></i></div>
+                                    <div class="gw-hero-slot" id="gw-slot-counter-1"
+                                        onclick="window.gwOpenPicker('counter',1)"><i class="fas fa-plus"></i></div>
+                                    <div class="gw-hero-slot" id="gw-slot-counter-2"
+                                        onclick="window.gwOpenPicker('counter',2)"><i class="fas fa-plus"></i></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="gw-editor-fields">
+                            <div class="gw-editor-field">
+                                <label><i class="fas fa-list-ol"></i> 스킬순서</label>
+                                <input type="text" id="gw-skill-order" placeholder="예: 챈2 → 콜1 → 2">
+                            </div>
+                            <div class="gw-editor-field">
+                                <label><i class="fas fa-shield-alt"></i> 장비 (한 줄에 하나)</label>
+                                <textarea id="gw-equipment" rows="3"
+                                    placeholder="플라튼 방어세트 방방받받&#10;콜트 추적자 공공받받"></textarea>
+                            </div>
+                            <div class="gw-editor-field-row">
+                                <div class="gw-editor-field">
+                                    <label><i class="fas fa-paw"></i> 펫</label>
+                                    <input type="text" id="gw-pet" placeholder="예: 이린">
+                                </div>
+                                <div class="gw-editor-field">
+                                    <label><i class="fas fa-info-circle"></i> 비고</label>
+                                    <input type="text" id="gw-note" placeholder="예: 오공 윗스킬 선일 경우">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal-actions">
+                            <button id="gw-cancel-btn" class="btn-secondary">취소</button>
+                            <button id="gw-save-btn" class="btn-primary">저장</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Guild War Hero Picker Modal -->
+                <div id="gw-picker-modal" class="modal-overlay" style="display:none;">
+                    <div class="modal-content gw-picker">
+                        <div class="gw-picker-header">
+                            <h3>영웅 선택</h3>
+                            <button class="modal-close-btn"
+                                onclick="document.getElementById('gw-picker-modal').style.display='none'"><i
+                                    class="fas fa-times"></i></button>
+                        </div>
+                        <div class="search-box" style="margin-bottom: 15px;">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="gw-picker-search" placeholder="영웅 이름 검색...">
+                        </div>
+                        <div id="gw-picker-list" class="book-grid">
+                            <!-- Hero icons rendered by JS -->
                         </div>
                     </div>
                 </div>
