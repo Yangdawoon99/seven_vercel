@@ -229,7 +229,6 @@ function renderHeroBook() {
         item.innerHTML = `
             <img src="${hero.icon}" alt="${hero.name}">
             <h4>${hero.name}</h4>
-            <p>${hero.type === 'physical' ? '물리' : '마법'}</p>
             <div class="add-overlay"><i class="fas fa-plus"></i> 추가</div>
         `;
         list.appendChild(item);

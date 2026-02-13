@@ -886,3 +886,199 @@ body {
         grid-template-columns: 1fr;
     }
 }
+
+/* ========== HERO BOOK & PREMIUM UI ========== */
+.header-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.search-box {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(153, 0, 0, 0.3);
+    border-radius: 10px;
+    padding: 0 14px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    backdrop-filter: blur(5px);
+}
+
+.search-box:focus-within {
+    border-color: var(--primary);
+    background: rgba(153, 0, 0, 0.05);
+    box-shadow: 0 0 20px rgba(153, 0, 0, 0.15);
+}
+
+.search-box i {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.search-box input {
+    background: transparent;
+    border: none;
+    color: var(--text-main);
+    padding: 10px 0 10px 10px;
+    outline: none;
+    width: 220px;
+    font-size: 0.9rem;
+    font-family: inherit;
+}
+
+.btn-secondary {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(153, 0, 0, 0.2);
+    color: var(--text-main);
+}
+
+.btn-secondary:hover {
+    background: rgba(153, 0, 0, 0.1);
+    border-color: var(--primary);
+    color: white;
+}
+
+/* Compact Encyclopedia Design */
+.modal-content.large {
+    max-width: 1200px !important;
+    width: 95% !important;
+    background: rgba(15, 15, 15, 0.98) !important;
+    backdrop-filter: blur(40px);
+    border: 1px solid rgba(153, 0, 0, 0.4);
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.9);
+}
+
+.book-controls {
+    margin-bottom: 20px;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+}
+
+.book-grid {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fill, minmax(70px, 1fr)) !important;
+    /* Smaller icons for 100+ heroes */
+    gap: 8px !important;
+    overflow-y: auto;
+    max-height: 70vh;
+    padding: 15px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+}
+
+.book-item {
+    background: #000 !important;
+    border: 1px solid rgba(255, 215, 0, 0.3) !important;
+    border-radius: 4px !important;
+    padding: 0 !important;
+    aspect-ratio: 1/1 !important;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.book-item:hover {
+    border-color: #ffd700;
+    transform: scale(1.05);
+    z-index: 10;
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+}
+
+.book-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: all 0.3s ease;
+}
+
+.book-item h4 {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    color: #ffd700;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 4px 0;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.book-item .add-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(153, 0, 0, 0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 700;
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.book-item:hover .add-overlay {
+    opacity: 1;
+}
+
+/* Favorite Star Refinement */
+.favorite-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #ffd700;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    z-index: 5;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.favorite-btn:hover {
+    transform: scale(1.15);
+    background: var(--primary);
+    color: white;
+}
+
+.hero-card.is-favorite {
+    border-color: #ffd700;
+    box-shadow: 0 0 25px rgba(255, 215, 0, 0.1);
+}
+
+@media (max-width: 768px) {
+    .header-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .search-box input {
+        width: 100%;
+    }
+
+    .book-grid {
+        grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+    }
+}
