@@ -216,6 +216,110 @@ export const heroes = [
         stats: { attack: 2950, defense: 630, hp: 4300, speed: 32, crit_rate: 0.25, crit_damage: 2.0, weakness_rate: 0.2, block_rate: 0, effect_hit: 0.1, effect_resist: 0.1 }
     },
     {
+        id: "biscuit",
+        name: "비스킷",
+        icon: "https://nng-phinf.pstatic.net/MjAyNTA5MjZfMjU5/MDAxNzU4ODQ4MTEwOTMx.-TgixRnK7C2B5GjbO60z5vvOeofVhAfcwye5OyAA2wIg.tgRIvFgnjU2ER3O1MmWOUY0l5xhQqHH--5fchhI1Y5gg.JPEG/250723_%EC%84%B8%EB%82%98%EB%A6%AC%EB%B2%84%EC%8A%A4_%EC%98%81%EC%9B%857%EC%A2%85_%EC%8D%B8%EB%84%A4%EC%9D%BC_300x300_%EB%B9%84%EC%8A%A4%ED%82%B7.jpg",
+        level: 30,
+        type: "magic",
+        stats: { attack: 2250, defense: 610, hp: 4100, speed: 28, crit_rate: 0.1, crit_damage: 1.6, weakness_rate: 0.1, block_rate: 0.1, effect_hit: 0.2, effect_resist: 0.1 }
+    },
+    {
+        id: "victoria",
+        name: "빅토리아",
+        icon: "https://nng-phinf.pstatic.net/MjAyNTA1MDhfMTc3/MDAxNzQ2Njg1Mzg2NjU1.r5KxUETSlepeKgjSu8viWHIQHXjbu2C5sBREkFyTMZkg.qFSyEYeOHrxQscZPRuctdLaMG769RkmpV6_LxSkq4cwg.PNG/SKRE_NAVER_thumnail_victoria.png",
+        level: 30,
+        type: "physical",
+        stats: { attack: 2750, defense: 650, hp: 4600, speed: 30, crit_rate: 0.15, crit_damage: 1.7, weakness_rate: 0.15, block_rate: 0.1, effect_hit: 0.1, effect_resist: 0.1 }
+    },
+    {
+        id: "sarah",
+        name: "사라",
+        icon: "https://nng-phinf.pstatic.net/MjAyNTEwMjNfMjQ5/MDAxNzYxMjAwMzAwNjQ0.BPrBoY0WUd4CpeFYWz2vCEXjJvgbyN_ty_1TRaDNMWEg.R0L7Xi5uqlauNZ-_7_26_Gf3LybegL5UU74W9GW1TzIg.JPEG/251021_%EC%84%B8%EB%82%98%EB%A6%AC%EB%B2%84%EC%8A%A4_%EC%98%81%EC%9B%851%EC%A2%85%28%EC%82%AC%EB%9D%BC%29_%EC%8D%B8%EB%84%A4%EC%9D%BC_300x300.jpg",
+        level: 30,
+        type: "magic",
+        stats: { attack: 2100, defense: 600, hp: 4200, speed: 27, crit_rate: 0.05, crit_damage: 1.5, weakness_rate: 0.1, block_rate: 0.2, effect_hit: 0.2, effect_resist: 0.2 }
+    },
+    {
+        id: "sera",
+        name: "세라",
+        icon: "https://nng-phinf.pstatic.net/MjAyNTA4MjJfNSAg/MDAxNzU1ODI2MTgwOTI3.7Ib0gN2K5qbL_QVEOOyTKQwC86_r5NvgpfRouSRmMRwg.YE4P2odFGYwKG2qfo4DLfPR15L5c1gVENhWCgfdf-rYg.JPEG/250723_%EC%84%B8%EB%82%98%EB%A6%AC%EB%B2%84%EC%8A%A4_%EC%98%81%EC%9B%857%EC%A2%85_%EC%8D%B8%EB%84%A4%EC%9D%BC_300x300_%EC%84%B8%EB%9D%BC.jpg",
+        level: 30,
+        type: "magic",
+        stats: { attack: 2550, defense: 620, hp: 4100, speed: 29, crit_rate: 0.1, crit_damage: 1.6, weakness_rate: 0.15, block_rate: 0, effect_hit: 0.2, effect_resist: 0.1 }
+    },
+    {
+        id: "soy",
+        name: "소이",
+        icon: "https://nng-phinf.pstatic.net/MjAyNTA2MjdfOTcg/MDAxNzUwOTk4NjA2NzEy.63GQ0uUwfoyNmvbTjHRYehAA-Zc_u88pixgagBTUMfAg.VMjpqKqGD2QRUMPQG1EvhUAVW-XBfsojBU20gTKcnIAg.PNG/250617_%EC%84%B8%EB%82%98%EB%A6%AC%EB%B2%84%EC%8A%A4_%EB%9D%BC%EC%9A%B4%EC%A7%80%EC%98%81%EC%9B%85_%EC%86%8C%EC%9D%B4_%EC%8D%B8%EB%84%A4%EC%9D%BC_300x300.png",
+        level: 30,
+        type: "physical",
+        stats: { attack: 2650, defense: 630, hp: 4400, speed: 31, crit_rate: 0.15, crit_damage: 1.7, weakness_rate: 0.1, block_rate: 0.1, effect_hit: 0.1, effect_resist: 0.1 }
+    },
+    {
+        id: "sunwukong_new",
+        name: "손오공",
+        icon: "https://nng-phinf.pstatic.net/MjAyNTEyMThfOTkg/MDAxNzY2MDIyNzUzMjgy.mUNNr3wNDDwRPg-1MgjKyr65LLdgSDmnxjc809m4_Xwg.Xca_TGFBpsrsH0gqIEMQ-zWJWsaqVh6j7WisOmTvKWQg.JPEG/251209_%EC%84%B8%EB%82%98%EB%A6%AC%EB%B2%84%EC%8A%A4_%EC%98%81%EC%9B%854%EC%A2%85%28%EC%86%90%EC%98%A4%EA%B3%B5%29_%EC%8D%B8%EB%84%A4%EC%9D%BC_300x300.jpg",
+        level: 30,
+        type: "magic",
+        stats: { attack: 3300, defense: 880, hp: 6500, speed: 33, crit_rate: 0.15, crit_damage: 1.9, weakness_rate: 0.25, block_rate: 0.1, effect_hit: 0.15, effect_resist: 0.2 }
+    },
+    {
+        id: "sniffer",
+        name: "스니퍼",
+        icon: "https://nng-phinf.pstatic.net/MjAyNTA0MjFfOTQg/MDAxNzQ1MTk4NDk5OTQx.BiFJP6ManYUrWoQiQTDV-OJzvVuBKJimTFWEkWRkt0sg.jBei8o0R3cMdoZG8DZ47xmhMyT8gHeuOrFKhwCLKf4og.PNG/SKRE_NAVER_thumnail_snipper.png",
+        level: 30,
+        type: "physical",
+        stats: { attack: 2700, defense: 610, hp: 4150, speed: 30, crit_rate: 0.2, crit_damage: 1.8, weakness_rate: 0.1, block_rate: 0, effect_hit: 0.1, effect_resist: 0 }
+    },
+    {
+        id: "spike",
+        name: "스파이크",
+        icon: "https://nng-phinf.pstatic.net/MjAyNTA3MTFfODgg/MDAxNzUyMjEzMTQwNzgw.knHBzSvA4mTKxQtR8i8GIvtZZ19DHtPzPSsRVw5fIyMg.LN0vmhKVBzgKv36A8kdNjJLQmWkxPUIdwwh20k4kFXsg.PNG/250630_%EC%84%B8%EB%82%98%EB%A6%AC%EB%B2%84%EC%8A%A4_%EC%98%81%EC%9B%85%28%EC%8A%A4%ED%8C%8C%EC%9D%B4%ED%81%AC%29_%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8_%EC%8D%B8%EB%84%A4%EC%9D%BC_300x300.png",
+        level: 30,
+        type: "physical",
+        stats: { attack: 2850, defense: 820, hp: 5800, speed: 31, crit_rate: 0.1, crit_damage: 1.7, weakness_rate: 0.15, block_rate: 0.2, effect_hit: 0.25, effect_resist: 0.2 }
+    },
+    {
+        id: "silvesta",
+        name: "실베스타",
+        icon: "https://nng-phinf.pstatic.net/MjAyNTA3MThfMTMw/MDAxNzUyODAzMTcwNTQ3.22oTRQHsVRVtdGbAy5RQOjZ3Gxnm0TQkKszMfryGHNIg.rl1lw9IN0PNOECc2ZO-fAr1uGoGCFlFUxhIdA5o43TYg.JPEG/251209_%EC%84%B8%EB%82%98%EB%A6%AC%EB%B2%84%EC%8A%A4_%EC%98%81%EC%9B%854%EC%A2%85%28%EA%B2%94%EB%A6%AC%EB%91%90%EC%8A%A4%29_%EC%8D%B8%EB%84%A4%EC%9D%BC_300x300.jpg",
+        level: 30,
+        type: "magic",
+        stats: { attack: 3400, defense: 850, hp: 6200, speed: 34, crit_rate: 0.2, crit_damage: 2.0, weakness_rate: 0.2, block_rate: 0.1, effect_hit: 0.15, effect_resist: 0.15 }
+    },
+    {
+        id: "sylvia",
+        name: "실비아",
+        icon: "https://nng-phinf.pstatic.net/MjAyNTA1MjNfMTM3/MDAxNzQ3OTc1MzgyMjEx.w7-rk1OcQaumA2sctkBG1ULAPN210ZQMCzrfCFFfH2kg.Vf8z9FO8hPTXjvZlEU5LozGSqdHh6-Tb2MNB7pCbMY0g.PNG/250514_%EC%84%B8%EB%82%98%EB%A6%AC%EB%B2%84%EC%8A%A4_%EB%9D%BC%EC%9A%B4%EC%A7%80%EC%98%81%EC%9B%855%EC%9B%94%28%EC%8B%A4%EB%B9%84%EC%95%84%29_%EC%8D%B8%EB%84%A4%EC%9D%BC_300x300.png",
+        level: 30,
+        type: "magic",
+        stats: { attack: 2600, defense: 610, hp: 4100, speed: 29, crit_rate: 0.1, crit_damage: 1.6, weakness_rate: 0.1, block_rate: 0, effect_hit: 0.2, effect_resist: 0.15 }
+    },
+    {
+        id: "aragon",
+        name: "아라곤",
+        icon: "https://nng-phinf.pstatic.net/MjAyNTA2MjBfMTU4/MDAxNzUwMzg5MjE5Mzk4.hUO1c6mPWvydhAqcFDJaJqJdiXxvyQto-66LzfcpJjcg.uhOhH8miZktSg8K8tVpzZt5CuIuOi5_KN4kycP9RYF8g.PNG/250514_%EC%84%B8%EB%82%98%EB%A6%AC%EB%B2%84%EC%8A%A4_%EB%9D%BC%EC%9A%B4%EC%A7%80%EC%98%81%EC%9B%856%EC%9B%943%EC%A3%BC%EC%B0%A8%28%EC%95%84%EB%9D%BC%EA%B3%A4%29_%EC%8D%B8%EB%84%A4%EC%9D%BC_300x300.png",
+        level: 30,
+        type: "physical",
+        stats: { attack: 2800, defense: 750, hp: 5200, speed: 28, crit_rate: 0.1, crit_damage: 1.6, weakness_rate: 0.1, block_rate: 0.2, effect_hit: 0.1, effect_resist: 0.1 }
+    },
+    {
+        id: "ariel",
+        name: "아리엘",
+        icon: "https://nng-phinf.pstatic.net/MjAyNTA0MTFfMTgz/MDAxNzQ0MzQ4NDM4NDIw.0Xuv1VxdL1-CC4NTw1O8d6U3gFVsWMT2QmBQ-CbO5z0g.lGgRdJvsbNUWMFJqp4aggFfAKR-k8wmu01xPMT1M2yQg.PNG/SKRE_NAVER_thumnail_ariel.png",
+        level: 30,
+        type: "magic",
+        stats: { attack: 2400, defense: 600, hp: 4000, speed: 30, crit_rate: 0.15, crit_damage: 1.7, weakness_rate: 0.2, block_rate: 0, effect_hit: 0.1, effect_resist: 0.1 }
+    },
+    {
+        id: "amelia",
+        name: "아멜리아",
+        icon: "https://nng-phinf.pstatic.net/MjAyNTEwMDFfMTM5/MDAxNzU5MzE1NDk1Mjc0.N1LgY2u6k3s-tdh5vjsix_R8JCXVcWvwp1JhXyEUBawg.PH600w5INSQun6GPT7csE0o3SM9MS-J8zltiN_s9TmUg.JPEG/250916_%EC%84%B8%EB%82%98%EB%A6%AC%EB%B2%84%EC%8A%A4_%EC%98%81%EC%9B%855%EC%A2%85_%EC%8D%B8%EB%84%A4%EC%9D%BC_300x300_%EC%95%84%EB%A9%9C%EB%A6%AC%EC%95%84.jpg",
+        level: 30,
+        type: "physical",
+        stats: { attack: 2900, defense: 660, hp: 4800, speed: 32, crit_rate: 0.2, crit_damage: 1.8, weakness_rate: 0.2, block_rate: 0.1, effect_hit: 0.1, effect_resist: 0.1 }
+    },
+    {
         id: "melkir",
         name: "멜키르",
         icon: "https://nng-phinf.pstatic.net/MjAyNTA2MjdfMjYx/MDAxNzUwOTk0MzI3NjE2.Q8F7dh225yH7P2RgZilQOcJF5f2uEOz3fO0EmxuZpPUg.YzE43PirqJDB5SgRywqNK7kJmWRWUcuynLOI6gJEalsg.PNG/250514_%EC%84%B8%EB%82%98%EB%A6%AC%EB%B2%84%EC%8A%A4_%EB%9D%BC%EC%9A%B4%EC%A7%80%EC%98%81%EC%9B%85%28%EB%A9%9C%ED%82%A4%EB%A5%B4%29_%EC%8D%B8%EB%84%A4%EC%9D%BC_300x300_%281%29.png",
@@ -238,14 +342,6 @@ export const heroes = [
         level: 30,
         type: "physical",
         stats: { attack: 1500, defense: 1200, hp: 8000, speed: 19, crit_rate: 0.0, crit_damage: 1.5, weakness_rate: 0.0, block_rate: 0.3, effect_hit: 0.0, effect_resist: 0.5 }
-    },
-    {
-        id: "sunwukong",
-        name: "손오공",
-        icon: "https://nng-phinf.pstatic.net/MjAyNTAxMDlfMjA=/MDAxNzM2MzkzNTM3OTk4.Foz2sIb9PUSOnpdN6yOgV6RGUQ5Vb04t9Ws2fJVjAiUg.nSwfI7L8hcml3kGxa0Op9mgZv36IA3vti7YX__0OCRIg.PNG/SKRE_NAVER_thumnail_sun_wukong.png",
-        level: 30,
-        type: "magic",
-        stats: { attack: 2900, defense: 800, hp: 6000, speed: 32, crit_rate: 0.1, crit_damage: 1.8, weakness_rate: 0.2, block_rate: 0, effect_hit: 0.1, effect_resist: 0.2 }
     },
     {
         id: "ace",
