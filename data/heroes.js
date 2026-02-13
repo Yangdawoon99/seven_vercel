@@ -26,7 +26,7 @@ export const heroes = [
     {
         id: "velika",
         name: "벨리카",
-        icon: "https://nng-phinf.pstatic.net/MjAyNTA4MjJfODIg/MDAxNzU1ODQyNjM1MDQ2.nE23fXn5_45-Y7X3_tI3G_1e4T0U94OaN4G4f1e4I0Ag.9N8d8A47fXn5_45-Y7X3_tI3G_1e4T0U94OaN4G4f1e4I0Ag.JPEG/250819_%EB%B2%A4%EB%A6%AC%EC%B9%B4.jpg",
+        icon: "https://nng-phinf.pstatic.net/MjAyNTA1MTZfMjIx/MDAxNzQ3MzcwNTE0MzAx.LxA7iQfuoXZGp5CPGX_J7a0Ugk1WtUiQ6qeA0ZzNV7kg.ZbSPHWka_sDCzrSEPaxuIRQACQVG39dPwfEQChfa6CIg.PNG/250514_%EC%84%B8%EB%82%98%EB%A6%AC%EB%B2%84%EC%8A%A4_%EB%9D%BC%EC%9A%B4%EC%A7%80%EC%98%81%EC%9B%855%EC%9B%94%28%EB%B2%A8%EB%A6%AC%EC%B9%B4%29_%EC%8D%B8%EB%84%A4%EC%9D%BC_300x300.png",
         level: 30,
         type: "magic",
         stats: { attack: 2600, defense: 600, hp: 4000, speed: 30, crit_rate: 0.1, crit_damage: 1.7, weakness_rate: 0.15, block_rate: 0, effect_hit: 0.1, effect_resist: 0 }
@@ -34,7 +34,7 @@ export const heroes = [
     {
         id: "sokyo",
         name: "소교",
-        icon: "https://nng-phinf.pstatic.net/MjAyNTIwMDlfODQg/MDAxNzcwNjE0MjAyNDI1.7bsDn3xaAoegty1zqPtXGwT1nNOj5D6Y5ktjkUGBOtMg.OtujecMe4N3nkNnPS80-bpr-2mkCQ2f9hn28ty34g.JPEG/260202_%EC%84%B8%EB%82%98%EB%A6%AC%EB%B2%84%EC%8A%A4_%EC%98%81%EC%9B%855%EC%A2%85%28%EC%86%8C%EA%B5%90%29_%EC%8D%B8%EB%84%A4%EC%9D%BC_300x300.jpg",
+        icon: "https://nng-phinf.pstatic.net/MjAyNjAyMDlfODQg/MDAxNzcwNjE0MjAyNDI1.7bsDn3xaAoegty1zqPtXGwT1nNOj5D6Y5ktjkUGBOtMg.OtujecMe4N3nkNnPS80-bpr-2mkCQ2f9hn28ty34g.JPEG/260202_%EC%84%B8%EB%82%98%EB%A6%AC%EB%B2%84%EC%8A%A4_%EC%98%81%EC%9B%855%EC%A2%85%28%EC%86%8C%EA%B5%90%29_%EC%8D%B8%EB%84%A4%EC%9D%BC_300x300.jpg",
         level: 30,
         type: "magic",
         stats: { attack: 2200, defense: 620, hp: 4300, speed: 28, crit_rate: 0.1, crit_damage: 1.5, weakness_rate: 0.1, block_rate: 0, effect_hit: 0.15, effect_resist: 0.1 }
@@ -158,6 +158,62 @@ export const heroes = [
         level: 30,
         type: "magic",
         stats: { attack: 3100, defense: 700, hp: 4800, speed: 34, crit_rate: 0.2, crit_damage: 2.0, weakness_rate: 0.25, block_rate: 0, effect_hit: 0.2, effect_resist: 0 }
+    },
+    {
+        id: "milia",
+        name: "밀리아",
+        icon: "https://nng-phinf.pstatic.net/MjAyNTEyMThfNDAg/MDAxNzY2MDIzMDkwNjIy.wQYelKnvARIm-NQXPZzP8aPVqzyTrqhMGAXbgdXqWBog.au3o3e95QfZGKn6gZlfAIHfVle6aiTbY0qkuQQikFLcg.JPEG/251209_%EC%84%B8%EB%82%98%EB%A6%AC%EB%B2%84%EC%8A%A4_%EC%98%81%EC%9B%854%EC%A2%85%28%EB%B0%80%EB%A6%AC%EC%95%84%29_%EC%8D%B8%EB%84%A4%EC%9D%BC_300x300.jpg",
+        level: 30,
+        type: "physical",
+        stats: { attack: 2800, defense: 640, hp: 4600, speed: 32, crit_rate: 0.15, crit_damage: 1.8, weakness_rate: 0.2, block_rate: 0, effect_hit: 0.1, effect_resist: 0.1 }
+    },
+    {
+        id: "vanessa",
+        name: "바네사",
+        icon: "https://nng-phinf.pstatic.net/MjAyNTA3MTFfMTc5/MDAxNzUyMjEyODUxNzg1.Ubm2ngfiHOL3Ho3zAvjDB7OAFc7O5oucZPMoFaocjDwg.-7yEkZ6959KPwfegWzIdYPJRc2clewdgrbny2SITO1Ug.PNG/250630_%EC%84%B8%EB%82%98%EB%A6%AC%EB%B2%84%EC%8A%A4_%EC%98%81%EC%9B%85%28%EB%B0%94%EB%84%A4%EC%82%AC%29_%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8_%EC%8D%B8%EB%84%A4%EC%9D%BC_300x300.png",
+        level: 30,
+        type: "magic",
+        stats: { attack: 2150, defense: 620, hp: 4400, speed: 29, crit_rate: 0.05, crit_damage: 1.5, weakness_rate: 0.1, block_rate: 0.1, effect_hit: 0.2, effect_resist: 0.25 }
+    },
+    {
+        id: "ballista",
+        name: "발리스타",
+        icon: "https://nng-phinf.pstatic.net/MjAyNTA4MjlfMzYg/MDAxNzU2NDMwMDgxNDU5.J8rhcfhNAq7UWWBUuWOUFVXKN6xCFBTWGNvlbGxUioQg.GvWRiMgOXR_zfs-bOkWG6Utc2CE3qkNw9jT-_RKV2Bwg.JPEG/250723_%EC%84%B8%EB%82%98%EB%A6%AC%EB%B2%84%EC%8A%A4_%EC%98%81%EC%9B%857%EC%A2%85_%EC%8D%B8%EB%84%A4%EC%9D%BC_300x300_%EB%B0%9C%EB%A6%AC%EC%8A%A4%ED%83%80.jpg",
+        level: 30,
+        type: "physical",
+        stats: { attack: 2900, defense: 600, hp: 4200, speed: 33, crit_rate: 0.25, crit_damage: 2.1, weakness_rate: 0.2, block_rate: 0, effect_hit: 0, effect_resist: 0.05 }
+    },
+    {
+        id: "baekgak",
+        name: "백각",
+        icon: "https://nng-phinf.pstatic.net/MjAyNjAxMTNfMTcw/MDAxNzY4MjkzNzc1MTAx.0FBA6GM72tKaAivruJ8URC_ebRXdJaZCU79HhZe-pGEg._fCAIvNnzIL1xXu0uHw0qCaQzNY6ewlhoBTjVHTdtN8g.JPEG/260106_%EC%84%B8%EB%82%98%EB%A6%AC%EB%B2%84%EC%8A%A4_%EC%98%81%EC%9B%854%EC%A2%85%28%EB%B0%B1%EA%B0%81%29_%EC%8D%B8%EB%84%A4%EC%9D%BC_300x300.jpg",
+        level: 30,
+        type: "magic",
+        stats: { attack: 2300, defense: 610, hp: 4050, speed: 28, crit_rate: 0.1, crit_damage: 1.6, weakness_rate: 0.15, block_rate: 0, effect_hit: 0.25, effect_resist: 0.1 }
+    },
+    {
+        id: "branzcell",
+        name: "브란즈&브란셀",
+        icon: "https://nng-phinf.pstatic.net/MjAyNjAxMDZfMTUz/MDAxNzY3Njg1Njk5NTk5.mzPsEBTy28Iu988MNyyVRFCVjr9jJ2MV32wveGe8PdQg.PsWiZgvTnwqE30ITd5pLXgX0--8xU6j35jUThiRXr5kg.JPEG/260106_%EC%84%B8%EB%82%98%EB%A6%AC%EB%B2%84%EC%8A%A4_%EC%98%81%EC%9B%854%EC%A2%85%28%EB%B8%8C%EB%9E%80%EC%A6%88%EB%B8%8C%EB%9E%80%EC%85%80%29_%EC%8D%B8%EB%84%A4%EC%9D%BC_300x300.jpg",
+        level: 30,
+        type: "physical",
+        stats: { attack: 3150, defense: 720, hp: 5800, speed: 33, crit_rate: 0.2, crit_damage: 1.9, weakness_rate: 0.2, block_rate: 0.1, effect_hit: 0.1, effect_resist: 0.1 }
+    },
+    {
+        id: "blackrose",
+        name: "블랙로즈",
+        icon: "https://nng-phinf.pstatic.net/MjAyNTA4MTRfOTEg/MDAxNzU1MTUxNjAzMDY2.47i-EoycLDTI6uTG1tnrcjpVtBVXecCPb_WZhq1IlT4g.PkjWVWqLj31igytHEucI4MHrN3fw6NpH61noGvQhftUg.JPEG/250723_%EC%84%B8%EB%82%98%EB%A6%AC%EB%B2%84%EC%8A%A4_%EC%98%81%EC%9B%857%EC%A2%85_%EC%8D%B8%EB%84%A4%EC%9D%BC_300x300_%EB%B8%94%EB%9E%99%EB%A1%9C%EC%A6%88.jpg",
+        level: 30,
+        type: "physical",
+        stats: { attack: 2850, defense: 610, hp: 4400, speed: 34, crit_rate: 0.3, crit_damage: 2.1, weakness_rate: 0.2, block_rate: 0, effect_hit: 0.1, effect_resist: 0.05 }
+    },
+    {
+        id: "bidam",
+        name: "비담",
+        icon: "https://nng-phinf.pstatic.net/MjAyNTA2MTNfMTAg/MDAxNzQ5Nzg5Mzk5MjEw.L6fhkxy6cMUtYggsYd7aPr-9LvbcYFDR3SwKh6ikSlwg.Se0RP0lFrgvAfwRQySDMvtw8CmJwlZEIqT0gWlBmpq4g.PNG/250612_%EC%84%B8%EB%82%98%EB%A6%AC%EB%B2%84%EC%8A%A4_%EB%9D%BC%EC%9A%B4%EC%A7%80%EC%98%81%EC%9B%85_%EB%B9%84%EB%8B%B4_%EC%8D%B8%EB%84%A4%EC%9D%BC_300x300.png",
+        level: 30,
+        type: "physical",
+        stats: { attack: 2950, defense: 630, hp: 4300, speed: 32, crit_rate: 0.25, crit_damage: 2.0, weakness_rate: 0.2, block_rate: 0, effect_hit: 0.1, effect_resist: 0.1 }
     },
     {
         id: "melkir",
