@@ -109,22 +109,24 @@ function renderStrategies() {
         const groupHeader = document.createElement('div');
         groupHeader.className = 'gw-enemy-card-header';
 
-        let headerHtml = `
+        const groupHeader = document.createElement('div');
+        groupHeader.className = 'gw-enemy-card-header';
+
+        // Compact Hero Preview
+        const eBack = group.enemy.slice(0, 3);
+        const eFront = group.enemy.slice(3, 6);
+
+        groupHeader.innerHTML = `
             <div class="gw-speed-badge"><i class="fas fa-bolt"></i> ${group.speed}</div>
             <div class="gw-enemy-deck-preview">
-                <div class="gw-enemy-deck-column">
-                    <span class="gw-deck-label">후열</span>
-                    <div class="gw-deck-row">${eBack.map(name => renderHeroSlot(name)).join('')}</div>
-                </div>
-                <div class="gw-enemy-deck-column">
-                    <span class="gw-deck-label">전열</span>
-                    <div class="gw-deck-row">${eFront.map(name => renderHeroSlot(name)).join('')}</div>
-                </div>
+                <div class="gw-deck-row">${eBack.map(name => renderHeroSlot(name, true)).join('')}</div>
+                <div class="gw-deck-row">${eFront.map(name => renderHeroSlot(name, true)).join('')}</div>
             </div>
-            ${group.alt ? `<div class="gw-alt-info">OR ${renderHeroSlot(group.alt)}</div>` : ''}
-            <div class="gw-count-badge">공략 ${group.counters.length}개</div>
+            <div class="gw-enemy-info">
+                <div class="gw-count-badge">공략 ${group.counters.length}개</div>
+                ${group.alt ? `<span class="gw-alt-text">or ${group.alt}</span>` : ''}
+            </div>
         `;
-        groupHeader.innerHTML = headerHtml;
         groupEl.appendChild(groupHeader);
 
         // Click to expand
@@ -193,23 +195,24 @@ function renderStrategies() {
     });
 }
 
-function renderHeroSlot(name) {
+function renderHeroSlot(name, isCompact = false) {
+    const compactClass = isCompact ? 'compact' : '';
     if (!name || name === 'undefined') {
-        return `<div class="gw-hero-slot empty">
+        return `<div class="gw-hero-slot empty ${compactClass}">
             <i class="fas fa-plus"></i>
         </div>`;
     }
     const icon = getHeroIcon(name);
     if (icon) {
-        return `<div class="gw-hero-slot filled" title="${name}">
+        return `<div class="gw-hero-slot filled ${compactClass}" title="${name}">
             <img src="${icon}" alt="${name}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
             <span class="gw-hero-fallback" style="display:none;">${name[0]}</span>
-            <span class="gw-hero-name">${name}</span>
+            ${!isCompact ? `<span class="gw-hero-name">${name}</span>` : ''}
         </div>`;
     }
-    return `<div class="gw-hero-slot filled" title="${name}">
+    return `<div class="gw-hero-slot filled ${compactClass}" title="${name}">
         <span class="gw-hero-fallback">${name[0]}</span>
-        <span class="gw-hero-name">${name}</span>
+        ${!isCompact ? `<span class="gw-hero-name">${name}</span>` : ''}
     </div>`;
 }
 
