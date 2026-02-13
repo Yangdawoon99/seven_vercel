@@ -61,27 +61,33 @@ window.checkGlobalCode = () => {
     }
 };
 
+// Global reset function
+window.logout = async () => {
+    if (confirm('로그아웃 하시겠습니까?')) {
+        // 1. Clear Local User Session
+        localStorage.removeItem('guild_user');
+
+        // 2. Clear Global Auth (Session Level)
+        sessionStorage.removeItem('sena_global_auth');
+        sessionStorage.clear(); // Clear all temporary session data
+
+        // 3. Supabase SignOut (Best Practice for Auth State)
+        try {
+            const { error } = await supabase.auth.signOut();
+            if (error) console.warn("Supabase SignOut Warning:", error.message);
+        } catch (e) {
+            console.error("Logout Error:", e);
+        }
+
+        // 4. Reload to Login Screen
+        alert('로그아웃 되었습니다.');
+        window.location.reload();
+    }
+};
+
 // --- Modules handle their own data loading ---
-// import { loadHeroes } from './ui/heroes.js'; // managed by initHeroesUI
-// import { loadEquipments } from './ui/equipment.js'; // managed by initEquipmentUI
+// initAuth handles initial loading, sub-modules handle their own refresh
 
-// ... inside hero form submit ...
-const heroData = {
-    user_id: AuthState.selectedMember.id, // Bind to current user
-    name: name,
-    type: type,
-    stats: stats
-};
-
-// ... inside equipment form submit ...
-const equipData = {
-    user_id: AuthState.selectedMember.id, // Bind to current user
-    name: name,
-    category: category,
-    set_option: setOption,
-    main_option: mainOpt,
-    sub_options: subOpts
-};
 
 async function loadMembers() {
     try {
@@ -306,13 +312,7 @@ function unlockApp() {
     }
 }
 
-// Global reset function
-window.logout = () => {
-    localStorage.removeItem('guild_user');
-    sessionStorage.removeItem('sena_global_auth');
-    location.reload();
-};
-
+// Sub-modules initialization
 import { initHeroesUI } from './ui/heroes.js';
 import { initEquipmentUI } from './ui/equipment.js';
 import { initContentsUI } from './ui/contents.js';
