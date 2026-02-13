@@ -79,7 +79,7 @@ function renderStrategies() {
         const sDate = new Date(s.updated_at || s.created_at);
         if (sDate > groups[key].latestDate) {
             groups[key].latestDate = sDate;
-            groups[key].latestTitle = s.title || '';
+            groups[key].latestEnemyTitle = s.enemy_title || s.title || ''; // Use enemy_title primarily for group
         }
         groups[key].counters.push(s);
     });
@@ -87,9 +87,9 @@ function renderStrategies() {
     // Sort groups by latest counter date
     const filteredGroups = Object.values(groups).sort((a, b) => b.latestDate - a.latestDate).filter(g => {
         if (!search) return true;
-        const allNames = [...g.enemy, ...g.counters.flatMap(c => c.counter_heroes)];
+        const allNames = [...g.enemy, ...g.counters.flatMap(c => [c.counter_heroes, c.title, c.enemy_title])].flat();
         if (g.alt) allNames.push(g.alt);
-        if (g.latestTitle) allNames.push(g.latestTitle);
+        if (g.latestEnemyTitle) allNames.push(g.latestEnemyTitle);
         return allNames.some(n => n && n.toLowerCase().includes(search));
     });
 
@@ -119,7 +119,7 @@ function renderStrategies() {
 
         gwGroupHeader.innerHTML = `
             <div class="gw-header-left">
-                <div class="gw-group-title">${group.latestTitle || '공략 셋업'}</div>
+                <div class="gw-group-title">${group.latestEnemyTitle || '상대 방어팀'}</div>
             </div>
             <div class="gw-header-center">
                 <div class="gw-enemy-deck-preview">
@@ -253,6 +253,7 @@ function openStrategyEditor(id, prefillData = null) {
             setVal('gw-note', s.note || '');
             setVal('gw-enemy-alt', s.enemy_alt || '');
             setVal('gw-speed', s.speed || 0);
+            setVal('gw-enemy-title', s.enemy_title || '');
             setVal('gw-title', s.title || '');
         }
     } else if (prefillData) {
@@ -260,6 +261,7 @@ function openStrategyEditor(id, prefillData = null) {
         editorSlots.enemy = [...(prefillData.enemy || []), ...Array(6).fill(null)].slice(0, 6);
         setVal('gw-enemy-alt', prefillData.alt || '');
         setVal('gw-speed', prefillData.speed || 0);
+        setVal('gw-enemy-title', prefillData.latestEnemyTitle || '');
 
         // Reset others
         setVal('gw-skill-order', '');
@@ -274,6 +276,7 @@ function openStrategyEditor(id, prefillData = null) {
         setVal('gw-note', '');
         setVal('gw-enemy-alt', '');
         setVal('gw-speed', 0);
+        setVal('gw-enemy-title', '');
         setVal('gw-title', '');
     }
 
@@ -379,6 +382,7 @@ async function saveStrategy() {
         pet: document.getElementById('gw-pet').value.trim() || null,
         note: document.getElementById('gw-note').value.trim() || null,
         speed: parseInt(document.getElementById('gw-speed').value) || 0,
+        enemy_title: document.getElementById('gw-enemy-title').value.trim() || null,
         title: document.getElementById('gw-title').value.trim() || null,
         author_name: authorName,
         updated_at: new Date().toISOString()
@@ -426,7 +430,15 @@ window.gwOpenAddCounter = (gIdx) => {
     strategies.forEach(s => {
         const heroes = (s.enemy_heroes || []).filter(h => h && h !== 'undefined');
         const key = heroes.sort().join('+') + (s.enemy_alt ? `/${s.enemy_alt}` : '') + `|${s.speed || 0}`;
-        if (!groups[key]) groups[key] = { enemy: s.enemy_heroes, alt: s.enemy_alt, speed: s.speed || 0 };
+        if (!groups[key]) {
+            const sDate = new Date(s.updated_at || s.created_at);
+            groups[key] = {
+                enemy: s.enemy_heroes,
+                alt: s.enemy_alt,
+                speed: s.speed || 0,
+                latestEnemyTitle: s.enemy_title || s.title || ''
+            };
+        }
     });
     const groupArr = Object.values(groups);
     const targetGroup = groupArr[gIdx];
