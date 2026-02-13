@@ -106,10 +106,10 @@ function renderStrategies() {
         // Compact Hero Preview
         const eBack = group.enemy.slice(0, 3);
         const eFront = group.enemy.slice(3, 6);
-        const groupHeader = document.createElement('div');
-        groupHeader.className = 'gw-enemy-card-header';
+        const gwGroupHeader = document.createElement('div');
+        gwGroupHeader.className = 'gw-enemy-card-header';
 
-        groupHeader.innerHTML = `
+        gwGroupHeader.innerHTML = `
             <div class="gw-speed-badge"><i class="fas fa-bolt"></i> ${group.speed}</div>
             <div class="gw-enemy-deck-preview">
                 <div class="gw-deck-row">${eBack.map(name => renderHeroSlot(name, true)).join('')}</div>
@@ -120,10 +120,10 @@ function renderStrategies() {
                 ${group.alt ? `<span class="gw-alt-text">or ${group.alt}</span>` : ''}
             </div>
         `;
-        groupEl.appendChild(groupHeader);
+        groupEl.appendChild(gwGroupHeader);
 
         // Click to expand
-        groupHeader.onclick = () => {
+        gwGroupHeader.onclick = () => {
             // Close others? Optional. For now let's toggle.
             // If we want Grid-friendly logic: one expanded at a time often works best for layout
             const wasExpanded = groupEl.classList.contains('expanded');
