@@ -173,7 +173,15 @@
                 <div id="heroes-section" class="section" style="display: none;">
                     <div class="section-header">
                         <h2>영웅 관리</h2>
-                        <button id="add-hero-btn" class="btn-primary"><i class="fas fa-plus"></i> 영웅 추가</button>
+                        <div class="header-actions">
+                            <div class="search-box">
+                                <i class="fas fa-search"></i>
+                                <input type="text" id="hero-search" placeholder="영웅 이름 검색...">
+                            </div>
+                            <button id="hero-book-btn" class="btn-secondary"><i class="fas fa-book"></i> 도감에서
+                                추가</button>
+                            <button id="add-hero-btn" class="btn-primary"><i class="fas fa-plus"></i> 영웅 등록</button>
+                        </div>
                     </div>
                     <div id="hero-list" class="grid-list">
                         <!-- Hero Cards will be injected here -->
@@ -478,6 +486,25 @@
             </div>
     </div>
     </main>
+    </div>
+
+    <!-- Hero Book Modal -->
+    <div id="hero-book-modal" class="modal">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h2>영웅 도감</h2>
+                <span class="close-modal">&times;</span>
+            </div>
+            <div class="book-controls">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="book-search" placeholder="도감 영웅 검색...">
+                </div>
+            </div>
+            <div id="book-hero-list" class="book-grid">
+                <!-- Static heroes from data/heroes.js will be injected here -->
+            </div>
+        </div>
     </div>
 
     <script type="module" src="js/app.js?v=1.0.2"></script>

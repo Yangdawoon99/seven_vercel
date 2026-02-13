@@ -98,6 +98,29 @@ function setupEventListeners() {
         }
     });
 
+    // Search Handler
+    const searchInput = document.getElementById('hero-search');
+    searchInput.addEventListener('input', () => {
+        renderHeroList();
+    });
+
+    // Hero Book Modal
+    const bookBtn = document.getElementById('hero-book-btn');
+    const bookModal = document.getElementById('hero-book-modal');
+    const bookClose = bookModal.querySelector('.close-modal');
+    const bookSearchInput = document.getElementById('book-search');
+
+    bookBtn.addEventListener('click', () => {
+        renderHeroBook();
+        bookModal.style.display = 'block';
+    });
+
+    bookClose.addEventListener('click', () => { bookModal.style.display = 'none'; });
+
+    bookSearchInput.addEventListener('input', () => {
+        renderHeroBook();
+    });
+
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
         const idInput = document.getElementById('hero-id').value;
@@ -128,7 +151,6 @@ function setupEventListeners() {
             hero = heroes.find(h => h.id === idInput);
             if (hero) {
                 Object.assign(hero, { name, type, stats, level: 30, icon });
-                if (!hero.user_id) hero.user_id = getCurrentUserId();
             }
         } else {
             const userId = getCurrentUserId();
@@ -145,6 +167,7 @@ function setupEventListeners() {
                 level: 30,
                 stats,
                 icon,
+                is_favorite: false,
                 priority: []
             };
             heroes.push(hero);
@@ -165,6 +188,89 @@ function setupEventListeners() {
         form.reset();
         document.getElementById('hero-count').innerText = heroes.length;
     });
+}
+
+
+// Favorites Toggle
+window.toggleHeroFavorite = async function (e, heroId) {
+    if (e) e.stopPropagation();
+    const hero = heroes.find(h => h.id === heroId);
+    if (!hero) return;
+
+    hero.is_favorite = !hero.is_favorite;
+
+    const { error } = await supabase
+        .from('heroes')
+        .update({ is_favorite: hero.is_favorite })
+        .eq('id', heroId);
+
+    if (error) {
+        console.error('Failed to update favorite:', error);
+        hero.is_favorite = !hero.is_favorite; // Rollback
+        return;
+    }
+
+    renderHeroList();
+}
+
+
+// Hero Book Logic
+function renderHeroBook() {
+    const list = document.getElementById('book-hero-list');
+    const search = document.getElementById('book-search').value.toLowerCase();
+    list.innerHTML = '';
+
+    const filtered = staticHeroes.filter(h => h.name.toLowerCase().includes(search));
+
+    filtered.forEach(hero => {
+        const item = document.createElement('div');
+        item.className = 'book-item';
+        item.onclick = () => addHeroFromBook(hero);
+        item.innerHTML = `
+            <img src="${hero.icon}" alt="${hero.name}">
+            <h4>${hero.name}</h4>
+            <p>${hero.type === 'physical' ? '물리' : '마법'}</p>
+            <div class="add-overlay"><i class="fas fa-plus"></i> 추가</div>
+        `;
+        list.appendChild(item);
+    });
+}
+
+async function addHeroFromBook(staticHero) {
+    const userId = getCurrentUserId();
+    if (!userId) {
+        alert('로그인이 필요합니다.');
+        return;
+    }
+
+    // Check if already exists in User's list
+    if (heroes.find(h => h.name === staticHero.name)) {
+        if (!confirm(`${staticHero.name}은(는) 이미 리스트에 있습니다. 중복 추가하시겠습니까?`)) return;
+    }
+
+    const newHero = {
+        id: staticHero.id + '_' + Date.now(),
+        user_id: userId,
+        name: staticHero.name,
+        type: staticHero.type,
+        level: staticHero.level,
+        stats: staticHero.stats,
+        icon: staticHero.icon,
+        is_favorite: false,
+        priority: []
+    };
+
+    const { error } = await supabase.from('heroes').insert(newHero);
+    if (error) {
+        console.error('Failed to add hero from book:', error);
+        alert('추가 실패: ' + error.message);
+        return;
+    }
+
+    heroes.push(newHero);
+    renderHeroList();
+    document.getElementById('hero-book-modal').style.display = 'none';
+    alert(`${staticHero.name}이(가) 리스트에 추가되었습니다.`);
 }
 
 
@@ -198,16 +304,31 @@ window.editHero = function (heroId) {
 
 function renderHeroList() {
     const list = document.getElementById('hero-list');
+    const search = document.getElementById('hero-search').value.toLowerCase();
     list.innerHTML = '';
 
-    heroes.forEach(hero => {
-        const card = document.createElement('div');
-        card.className = 'card hero-card';
+    // Filter by search
+    let filtered = heroes.filter(h => h.name.toLowerCase().includes(search));
 
-        // Handle icon with fallback
+    // Sort: Favorites first, then Name
+    filtered.sort((a, b) => {
+        if (a.is_favorite === b.is_favorite) {
+            return a.name.localeCompare(b.name);
+        }
+        return a.is_favorite ? -1 : 1;
+    });
+
+    filtered.forEach(hero => {
+        const card = document.createElement('div');
+        card.className = `card hero-card ${hero.is_favorite ? 'is-favorite' : ''}`;
+
         const iconSrc = hero.icon ? hero.icon : 'https://via.placeholder.com/300?text=' + hero.name[0];
 
         card.innerHTML = `
+            <button class="favorite-btn ${hero.is_favorite ? 'active' : ''}" 
+                    onclick="window.toggleHeroFavorite(event, '${hero.id}')" title="즐겨찾기">
+                <i class="fa${hero.is_favorite ? 's' : 'r'} fa-star"></i>
+            </button>
             <div class="hero-image-container">
                 <img src="${iconSrc}" alt="${hero.name}" class="hero-avatar" onerror="this.src='https://via.placeholder.com/300?text=${hero.name[0]}'; this.onerror=null;">
                 <div class="hero-image-overlay"></div>
@@ -226,6 +347,5 @@ function renderHeroList() {
         list.appendChild(card);
     });
 
-    // Update dashboard count
     document.getElementById('hero-count').innerText = heroes.length;
 }
