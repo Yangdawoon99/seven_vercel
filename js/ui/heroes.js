@@ -59,7 +59,6 @@ function setupEventListeners() {
         if (matched) {
             previewIcon.src = matched.icon;
             previewIcon.style.display = 'block';
-            if (typeSelect) typeSelect.value = matched.type;
         } else {
             previewIcon.style.display = 'none';
         }
