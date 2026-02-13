@@ -161,6 +161,7 @@ function renderStrategies() {
             const dateStr = counter.updated_at ? new Date(counter.updated_at).toLocaleString() : new Date(counter.created_at).toLocaleString();
 
             card.innerHTML = `
+                ${counter.title ? `<div class="gw-strategy-title">🎯 ${counter.title}</div>` : ''}
                 <div class="gw-vs-layout">
                     <div class="gw-side gw-side-counter">
                         <div class="gw-side-label">상성 공략덱</div>

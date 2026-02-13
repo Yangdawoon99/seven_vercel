@@ -1431,7 +1431,7 @@ body {
 
     #gw-strategy-list {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
         gap: 15px;
         padding: 10px 0;
     }
@@ -1447,6 +1447,9 @@ body {
         flex-direction: column;
         gap: 10px;
         position: relative;
+        overflow: hidden;
+        /* Prevent border overflow */
+        box-sizing: border-box;
     }
 
     .gw-group:hover {
@@ -1454,18 +1457,20 @@ body {
         background: linear-gradient(135deg, var(--bg-secondary), rgba(153, 0, 0, 0.1));
     }
 
-    /* Expanded State - Spans full width */
+    /* Expanded State */
     .gw-group.expanded {
         grid-column: 1 / -1;
         cursor: default;
         background: var(--bg-dark);
-        border: 1px solid var(--accent-color);
+        border: 2px solid var(--accent-color);
     }
 
     .gw-enemy-card-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
+        width: 100%;
+        gap: 10px;
     }
 
     .gw-enemy-deck-preview {
@@ -1473,15 +1478,16 @@ body {
         flex-direction: column;
         gap: 4px;
         background: rgba(0, 0, 0, 0.4);
-        padding: 12px;
+        padding: 10px;
         border-radius: 10px;
         border: 1px solid rgba(255, 255, 255, 0.05);
+        flex-shrink: 0;
     }
 
     .gw-hero-slot.compact {
-        width: 44px;
-        height: 44px;
-        font-size: 0.65rem;
+        width: 40px;
+        height: 40px;
+        font-size: 0.6rem;
     }
 
     .gw-hero-slot.compact img {
@@ -1493,16 +1499,32 @@ body {
         flex-direction: column;
         align-items: flex-end;
         gap: 6px;
-        margin-top: 10px;
+        flex: 1;
+        min-width: 0;
+    }
+
+    .gw-strategy-title {
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: #ffd700;
+        margin-bottom: 12px;
+        padding-bottom: 8px;
+        border-bottom: 1px dashed rgba(255, 215, 0, 0.3);
+        word-break: keep-all;
     }
 
     .gw-alt-text {
         font-size: 0.7rem;
         color: var(--accent-color);
         font-weight: 600;
+        text-align: right;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        width: 100%;
     }
 
-    /* Counters List (Hidden by default) */
+    /* Counters List */
     .gw-counters-list {
         display: none;
         flex-direction: column;
