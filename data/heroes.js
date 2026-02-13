@@ -34,7 +34,7 @@ export const heroes = [
     {
         id: "sokyo",
         name: "소교",
-        icon: "https://nng-phinf.pstatic.net/MjAyNjAyMDlfODQg/MDAxNzcwNjE0MjAyNDI1.7bsDn3xaAoegty1zqPtXGwT1nNOj5D6Y5ktjkUGBOtMg.OtujecMe4N3nkNnPS80-bpr-2mkCQ2f9hn28ty34g.JPEG/260202_%EC%84%B8%EB%82%98%EB%A6%AC%EB%B2%84%EC%8A%A4_%EC%98%81%EC%9B%855%EC%A2%85%28%EC%86%8C%EA%B5%90%29_%EC%8D%B8%EB%84%A4%EC%9D%BC_300x300.jpg",
+        icon: "assets/images/sokyo_icon.png",
         level: 30,
         type: "magic",
         stats: { attack: 2200, defense: 620, hp: 4300, speed: 28, crit_rate: 0.1, crit_damage: 1.5, weakness_rate: 0.1, block_rate: 0, effect_hit: 0.15, effect_resist: 0.1 }
