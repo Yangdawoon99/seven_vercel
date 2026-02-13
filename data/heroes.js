@@ -31,14 +31,7 @@ export const heroes = [
         type: "magic",
         stats: { attack: 2600, defense: 600, hp: 4000, speed: 30, crit_rate: 0.1, crit_damage: 1.7, weakness_rate: 0.15, block_rate: 0, effect_hit: 0.1, effect_resist: 0 }
     },
-    {
-        id: "sokyo",
-        name: "소교",
-        icon: "assets/images/sokyo_icon.png",
-        level: 30,
-        type: "magic",
-        stats: { attack: 2200, defense: 620, hp: 4300, speed: 28, crit_rate: 0.1, crit_damage: 1.5, weakness_rate: 0.1, block_rate: 0, effect_hit: 0.15, effect_resist: 0.1 }
-    },
+
     {
         id: "lubu",
         name: "여포",
@@ -622,5 +615,13 @@ export const heroes = [
         level: 30,
         type: "physical",
         stats: { attack: 1550, defense: 1150, hp: 8500, speed: 18, crit_rate: 0.0, crit_damage: 1.5, weakness_rate: 0.0, block_rate: 0.5, effect_hit: 0, effect_resist: 0.4 }
+    },
+    {
+        id: "sokyo",
+        name: "소교",
+        icon: "assets/images/sokyo_hd.png",
+        level: 30,
+        type: "magic",
+        stats: { attack: 2200, defense: 620, hp: 4300, speed: 28, crit_rate: 0.1, crit_damage: 1.5, weakness_rate: 0.1, block_rate: 0, effect_hit: 0.15, effect_resist: 0.1 }
     }
 ];
