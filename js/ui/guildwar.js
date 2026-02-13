@@ -85,10 +85,22 @@ function renderStrategies() {
         // Enemy header
         const enemyHeader = document.createElement('div');
         enemyHeader.className = 'gw-enemy-header';
+
+        // Split enemy_heroes into back(0-2) and front(3-5)
+        const eBack = group.enemy.slice(0, 3);
+        const eFront = group.enemy.slice(3, 6);
+
         enemyHeader.innerHTML = `
             <div class="gw-enemy-label">🎯 상대 방어팀</div>
             <div class="gw-deck-icons">
-                ${group.enemy.map(name => renderHeroSlot(name)).join('')}
+                <div class="gw-deck-row">
+                    <div class="gw-deck-label">후열</div>
+                    ${eBack.map(name => renderHeroSlot(name)).join('')}
+                </div>
+                <div class="gw-deck-row">
+                    <div class="gw-deck-label">전열</div>
+                    ${eFront.map(name => renderHeroSlot(name)).join('')}
+                </div>
                 ${group.alt ? `<span class="gw-alt-label">or ${renderHeroSlot(group.alt)}</span>` : ''}
             </div>
         `;
@@ -99,16 +111,24 @@ function renderStrategies() {
             const card = document.createElement('div');
             card.className = 'gw-strategy-card';
 
+            const cBack = counter.counter_heroes.slice(0, 3);
+            const cFront = counter.counter_heroes.slice(3, 6);
+            const ceBack = counter.enemy_heroes.slice(0, 3);
+            const ceFront = counter.enemy_heroes.slice(3, 6);
+
             const equipHtml = (counter.equipment || []).map(eq =>
                 `<span class="gw-equip-tag"><b>${eq.hero}</b> ${eq.set} ${eq.stats}</span>`
             ).join('');
+
+            const dateStr = counter.updated_at ? new Date(counter.updated_at).toLocaleString() : new Date(counter.created_at).toLocaleString();
 
             card.innerHTML = `
                 <div class="gw-vs-layout">
                     <div class="gw-side gw-side-enemy">
                         <div class="gw-side-label">상대</div>
                         <div class="gw-deck-icons">
-                            ${counter.enemy_heroes.map(name => renderHeroSlot(name)).join('')}
+                            <div class="gw-deck-row">${ceBack.map(name => renderHeroSlot(name)).join('')}</div>
+                            <div class="gw-deck-row">${ceFront.map(name => renderHeroSlot(name)).join('')}</div>
                         </div>
                     </div>
                     <div class="gw-vs-divider">
@@ -117,7 +137,8 @@ function renderStrategies() {
                     <div class="gw-side gw-side-counter">
                         <div class="gw-side-label">상성덱</div>
                         <div class="gw-deck-icons">
-                            ${counter.counter_heroes.map(name => renderHeroSlot(name)).join('')}
+                            <div class="gw-deck-row">${cBack.map(name => renderHeroSlot(name)).join('')}</div>
+                            <div class="gw-deck-row">${cFront.map(name => renderHeroSlot(name)).join('')}</div>
                         </div>
                     </div>
                 </div>
@@ -126,6 +147,10 @@ function renderStrategies() {
                     ${equipHtml ? `<div class="gw-meta-row"><i class="fas fa-shield-alt"></i>${equipHtml}</div>` : ''}
                     ${counter.pet ? `<div class="gw-meta-row"><i class="fas fa-paw"></i><span>펫: ${counter.pet}</span></div>` : ''}
                     ${counter.note ? `<div class="gw-meta-row gw-note"><i class="fas fa-info-circle"></i><span>${counter.note}</span></div>` : ''}
+                    <div class="gw-meta-row author-info">
+                        <i class="fas fa-user-edit"></i>
+                        <span>${counter.author_name || '익명'} (${dateStr})</span>
+                    </div>
                 </div>
                 <div class="gw-card-actions">
                     <button class="gw-edit-btn" onclick="window.gwEditStrategy('${counter.id}')"><i class="fas fa-pen"></i> 수정</button>
@@ -156,18 +181,18 @@ function renderHeroSlot(name) {
 
 // ── Editor Modal ──
 let editingId = null;
-let editorSlots = { enemy: [null, null, null], counter: [null, null, null] };
-let currentPickerTarget = null; // { side: 'enemy'|'counter', index: 0-2 }
+let editorSlots = { enemy: Array(6).fill(null), counter: Array(6).fill(null) };
+let currentPickerTarget = null; // { side: 'enemy'|'counter', index: 0-5 }
 
 function openStrategyEditor(id) {
     editingId = id || null;
-    editorSlots = { enemy: [null, null, null], counter: [null, null, null] };
+    editorSlots = { enemy: Array(6).fill(null), counter: Array(6).fill(null) };
 
     if (id) {
         const s = strategies.find(s => s.id === id);
         if (s) {
-            editorSlots.enemy = [...(s.enemy_heroes || []), null, null].slice(0, 3);
-            editorSlots.counter = [...(s.counter_heroes || []), null, null].slice(0, 3);
+            editorSlots.enemy = [...(s.enemy_heroes || []), ...Array(6).fill(null)].slice(0, 6);
+            editorSlots.counter = [...(s.counter_heroes || []), ...Array(6).fill(null)].slice(0, 6);
             document.getElementById('gw-skill-order').value = s.skill_order || '';
             document.getElementById('gw-equipment').value = (s.equipment || []).map(e => `${e.hero} ${e.set} ${e.stats}`).join('\n');
             document.getElementById('gw-pet').value = s.pet || '';
@@ -194,7 +219,7 @@ function closeEditor() {
 
 function renderEditorSlots() {
     ['enemy', 'counter'].forEach(side => {
-        for (let i = 0; i < 3; i++) {
+        for (let i = 0; i < 6; i++) {
             const slotEl = document.getElementById(`gw-slot-${side}-${i}`);
             if (!slotEl) continue;
             const name = editorSlots[side][i];
@@ -254,10 +279,10 @@ function selectHeroForSlot(name) {
 
 // ── Save ──
 async function saveStrategy() {
-    const enemyHeroes = editorSlots.enemy.filter(Boolean);
-    const counterHeroes = editorSlots.counter.filter(Boolean);
+    const enemyHeroes = editorSlots.enemy.map(v => v || ''); // Keep empty strings for slots
+    const counterHeroes = editorSlots.counter.map(v => v || '');
 
-    if (enemyHeroes.length === 0 || counterHeroes.length === 0) {
+    if (enemyHeroes.every(v => !v) || counterHeroes.every(v => !v)) {
         alert('상대 팀과 상성 덱에 각각 최소 1명의 영웅을 배치해주세요.');
         return;
     }
@@ -268,6 +293,9 @@ async function saveStrategy() {
         return { hero: parts[0] || '', set: parts[1] || '', stats: parts.slice(2).join(' ') };
     }) : [];
 
+    const user = JSON.parse(localStorage.getItem('guild_user')) || {};
+    const authorName = user.nickname || '익명';
+
     const payload = {
         strategy_type: 'attack',
         enemy_heroes: enemyHeroes,
@@ -276,7 +304,9 @@ async function saveStrategy() {
         skill_order: document.getElementById('gw-skill-order').value.trim() || null,
         equipment: equipment,
         pet: document.getElementById('gw-pet').value.trim() || null,
-        note: document.getElementById('gw-note').value.trim() || null
+        note: document.getElementById('gw-note').value.trim() || null,
+        author_name: authorName,
+        updated_at: new Date().toISOString()
     };
 
     let error;

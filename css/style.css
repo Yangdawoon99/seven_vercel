@@ -1250,9 +1250,22 @@ body {
 /* Hero Deck Icons */
 .gw-deck-icons {
     display: flex;
+    flex-direction: column;
     gap: 8px;
     align-items: center;
-    flex-wrap: wrap;
+}
+
+.gw-deck-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.gw-deck-label {
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    width: 30px;
+    text-align: right;
 }
 
 .gw-hero-slot {
@@ -1412,8 +1425,29 @@ body {
 
 /* ── Editor Modal ── */
 .gw-editor {
-    max-width: 700px;
+    max-width: 800px;
     width: 95%;
+}
+
+.gw-editor-slots-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.gw-editor-row-label {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    font-weight: 600;
+}
+
+#gw-editor-modal {
+    z-index: 1000;
+}
+
+#gw-picker-modal {
+    z-index: 1001;
 }
 
 .gw-editor h3 {
