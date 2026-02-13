@@ -64,24 +64,32 @@ function renderStrategies() {
     // Group by enemy deck (normalized)
     const groups = {};
     strategies.forEach(s => {
-        // Filter empty strings out for the key
-        const heroes = (s.enemy_heroes || []).filter(h => h && h !== 'undefined');
-        const key = heroes.sort().join('+') + (s.enemy_alt ? `/${s.enemy_alt}` : '') + `|${s.speed || 0}`;
+        // Filter empty/undefined strings and normalize for the key
+        const heroes = (s.enemy_heroes || []).filter(h => h && h !== 'undefined' && h !== 'null').map(h => h.trim());
+        const key = heroes.sort().join('+') + (s.enemy_alt ? `/${s.enemy_alt.trim()}` : '') + `|${Number(s.speed) || 0}`;
 
         if (!groups[key]) groups[key] = {
             enemy: s.enemy_heroes,
             alt: s.enemy_alt,
-            speed: s.speed || 0,
+            speed: Number(s.speed) || 0,
             counters: [],
-            isExpanded: false
+            latestDate: new Date(0)
         };
+
+        const sDate = new Date(s.updated_at || s.created_at);
+        if (sDate > groups[key].latestDate) {
+            groups[key].latestDate = sDate;
+            groups[key].latestTitle = s.title || '';
+        }
         groups[key].counters.push(s);
     });
 
-    const filteredGroups = Object.values(groups).filter(g => {
+    // Sort groups by latest counter date
+    const filteredGroups = Object.values(groups).sort((a, b) => b.latestDate - a.latestDate).filter(g => {
         if (!search) return true;
         const allNames = [...g.enemy, ...g.counters.flatMap(c => c.counter_heroes)];
         if (g.alt) allNames.push(g.alt);
+        if (g.latestTitle) allNames.push(g.latestTitle);
         return allNames.some(n => n && n.toLowerCase().includes(search));
     });
 
@@ -110,14 +118,17 @@ function renderStrategies() {
         gwGroupHeader.className = 'gw-enemy-card-header';
 
         gwGroupHeader.innerHTML = `
-            <div class="gw-speed-badge"><i class="fas fa-bolt"></i> ${group.speed}</div>
-            <div class="gw-enemy-deck-preview">
-                <div class="gw-deck-row">${eBack.map(name => renderHeroSlot(name, true)).join('')}</div>
-                <div class="gw-deck-row">${eFront.map(name => renderHeroSlot(name, true)).join('')}</div>
+            <div class="gw-header-left">
+                <div class="gw-group-title">${group.latestTitle || '공략 셋업'}</div>
             </div>
-            <div class="gw-enemy-info">
+            <div class="gw-header-center">
+                <div class="gw-enemy-deck-preview">
+                    <div class="gw-deck-row">${eBack.map(name => renderHeroSlot(name, true)).join('')}</div>
+                    <div class="gw-deck-row">${eFront.map(name => renderHeroSlot(name, true)).join('')}</div>
+                </div>
+            </div>
+            <div class="gw-header-right">
                 <div class="gw-count-badge">공략 ${group.counters.length}개</div>
-                ${group.alt ? `<span class="gw-alt-text">or ${group.alt}</span>` : ''}
                 <button class="gw-add-counter-btn" onclick="event.stopPropagation(); window.gwOpenAddCounter('${gIdx}')">
                     <i class="fas fa-plus"></i> 공략 추가
                 </button>
@@ -157,7 +168,11 @@ function renderStrategies() {
             const dateStr = counter.updated_at ? new Date(counter.updated_at).toLocaleString() : new Date(counter.created_at).toLocaleString();
 
             card.innerHTML = `
-                ${counter.title ? `<div class="gw-strategy-title">🎯 ${counter.title}</div>` : ''}
+                <div class="gw-counter-label">
+                    <span class="gw-label-tag">단일 공략</span>
+                    <span class="gw-label-title">${counter.title || '제목 없음'}</span>
+                    <span class="gw-label-speed"><i class="fas fa-bolt"></i> ${counter.speed || 0}</span>
+                </div>
                 <div class="gw-vs-layout">
                     <div class="gw-side gw-side-counter">
                         <div class="gw-side-label">상성 공략덱</div>

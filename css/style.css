@@ -1423,20 +1423,16 @@ body {
 }
 
 .gw-speed-badge {
-    position: absolute;
-    top: 10px;
-    right: 10px;
     background: rgba(255, 215, 0, 0.15);
     color: #ffd700;
     border: 1px solid rgba(255, 215, 0, 0.3);
-    padding: 4px 8px;
-    border-radius: 6px;
-    font-size: 0.8rem;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.75rem;
     font-weight: bold;
     display: flex;
     align-items: center;
-    gap: 5px;
-    z-index: 5;
+    gap: 4px;
 }
 
 .gw-count-badge {
@@ -1488,17 +1484,46 @@ body {
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    gap: 10px;
+    gap: 15px;
+    padding: 4px 0;
+}
+
+.gw-header-left {
+    flex: 1;
+    min-width: 0;
+}
+
+.gw-header-center {
+    flex-shrink: 0;
+}
+
+.gw-header-right {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+    min-width: 0;
+}
+
+.gw-group-title {
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: #ffd700;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 .gw-enemy-deck-preview {
     display: flex;
     flex-direction: column;
-    gap: 4px;
-    background: rgba(0, 0, 0, 0.4);
-    padding: 10px;
-    border-radius: 10px;
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    gap: 2px;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 8px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
     flex-shrink: 0;
 }
 
@@ -1521,14 +1546,40 @@ body {
     min-width: 0;
 }
 
-.gw-strategy-title {
-    font-size: 0.9rem;
+.gw-counter-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+}
+
+.gw-label-tag {
+    background: var(--primary);
+    color: white;
+    font-size: 0.65rem;
+    font-weight: 800;
+    padding: 2px 6px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.gw-label-title {
+    font-size: 0.95rem;
     font-weight: 700;
     color: #ffd700;
-    margin-bottom: 10px;
-    padding-bottom: 6px;
-    border-bottom: 1px dashed rgba(255, 215, 0, 0.2);
-    word-break: keep-all;
+    flex: 1;
+}
+
+.gw-label-speed {
+    font-size: 0.8rem;
+    color: #ffd700;
+    background: rgba(255, 215, 0, 0.1);
+    padding: 2px 8px;
+    border-radius: 4px;
+    border: 1px solid rgba(255, 215, 0, 0.2);
 }
 
 .gw-alt-text {
